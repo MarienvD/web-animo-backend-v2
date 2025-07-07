@@ -69,6 +69,61 @@ public class ModelAnalyzer {
         }
     }
 
+    // TODO add some listener to notify the best cost found
+    public JSONObject performParameterFitting(Model model, JSONObject request
+//                                              ,Consumer<ParameterFitter.CostResult> bestCostListener
+    ) throws JSONException, IOException {
+        List<Reaction> reactionsToBeOptimized = new ArrayList();
+        JSONArray reactions = request.getJSONArray("reactions");
+
+        for(Reaction reaction : model.getReactionCollection()) {
+            for(int i = 0; i < reactions.length(); ++i) {
+                String reactionID = reactions.getString(i);
+                if (reaction.getId().equals(reactionID)) {
+                    reactionsToBeOptimized.add(reaction);
+                }
+            }
+        }
+
+        String name = Integer.toString(this.random.nextInt());
+        File tempCsvFile = File.createTempFile(name, ".csv");
+        Files.write(request.getString("referenceData"), tempCsvFile, Charset.defaultCharset());
+        String referenceDataFile = tempCsvFile.getAbsolutePath();
+        SortedMap<Reactant, String> reactantToDataCorrespondence = new TreeMap();
+        JSONArray reactantToReferenceJson = request.getJSONArray("reactantToReferenceData");
+
+        for(int i = 0; i < reactantToReferenceJson.length(); ++i) {
+            JSONObject correspondence = reactantToReferenceJson.getJSONObject(i);
+            Reactant reactant = model.getReactant(correspondence.getString("reactantID"));
+            reactantToDataCorrespondence.put(reactant, correspondence.getString("columnName"));
+        }
+
+        Properties parameters = new Properties();
+        if (request.has("params")) {
+            JSONObject params = request.getJSONObject("params");
+
+            for(String param : JSONObject.getNames(params)) {
+                parameters.setProperty(param, params.getString(param));
+            }
+        }
+
+        int timeTo = request.getInt("minutesToSimulate");
+        HashMap<String, Supplier<ParameterFitter>> fitters = new HashMap();
+        fitters.put("lma", (Supplier)() -> new LevenbergMarquardtFitter(model, reactionsToBeOptimized, referenceDataFile, reactantToDataCorrespondence, timeTo, parameters));
+        ParameterFitter fitter = (ParameterFitter)((Supplier)fitters.get(request.optString("algorithm", "genetic"))).get();
+
+        fitter.performHeadlessParameterFitting();
+        // TODO below
+//        JSONObject result = this.parametersToJson(parameters);
+//        tempCsvFile.delete();
+//        return result;
+
+        // when done, do this:
+//        graph.reset();
+//        function.compute(lm.getParameters(), X, Y, true);
+        return request;
+    }
+
     public Model getModelFromJson(JSONObject object, Double nMinutesToSimulate) throws JSONException, AnimoException {
         Model model = new Model();
         Map<Long, String> nodeSUIDToModelId = new HashMap();
@@ -245,7 +300,7 @@ public class ModelAnalyzer {
                             String[] paramNames = scenario.listVariableParameters();
 
                             for(String param : paramNames) {
-                                Double d = data.optDouble(param, scenario.getDefaultParameterValue(param));
+                                Double d = data.optDouble(param, (Double) scenario.getDefaultParameterValue(param));
                                 if (d < (double)0.0F) {
                                     throw new AnimoException("Reaction " + edgeName + " with parameter " + param + " = " + Utilities.roundToSignificantFigures(d, 4) + " < 0.\n" + "ANIMO" + " accepts only STRICTLY POSITIVE parameter values: please change it accordingly.");
                                 }
@@ -253,7 +308,7 @@ public class ModelAnalyzer {
                                 r.let(param).be(d);
                             }
 
-                            HashMap<String, Double> scenarioParameterValues = new HashMap();
+                            HashMap<String, Object> scenarioParameterValues = new HashMap();
 
                             for(int j = 0; j < paramNames.length; ++j) {
                                 Double parVal = (Double)r.get(paramNames[j]).as(Double.class);
@@ -497,10 +552,10 @@ public class ModelAnalyzer {
 
             double minTime = Double.POSITIVE_INFINITY;
             double maxTime = Double.NEGATIVE_INFINITY;
-            final double minTimeKValue = (double)0.0F;
-            final double maxTimeKValue = (double)0.0F;
-            final String minTimeReactionName = "";
-            final String maxTimeReactionName = "";
+            double minTimeKValue = (double)0.0F;
+            double maxTimeKValue = (double)0.0F;
+            String minTimeReactionName = "";
+            String maxTimeReactionName = "";
 
             for(Reaction r : model.getReactionCollection()) {
                 Boolean enabled = (Boolean)r.get("enabled").as(Boolean.class);
@@ -598,7 +653,7 @@ public class ModelAnalyzer {
                             minTimeReactionName = reactionName;
                             String[] params = scenario.listVariableParameters();
                             if (params.length > 0) {
-                                minTimeKValue = scenario.getParameter(params[0]);
+                                minTimeKValue = (double) scenario.getParameter(params[0]);
                             }
                         }
                     }
@@ -610,7 +665,7 @@ public class ModelAnalyzer {
                             maxTimeReactionName = reactionName;
                             String[] params = scenario.listVariableParameters();
                             if (params.length > 0) {
-                                maxTimeKValue = scenario.getParameter(params[0]);
+                                maxTimeKValue = (double) scenario.getParameter(params[0]);
                             }
                         }
                     }
@@ -649,9 +704,15 @@ public class ModelAnalyzer {
             }
 
             if (minTime < (double)1.0F) {
+                String finalMinTimeReactionName = minTimeReactionName;
+                double finalMinTimeKValue = minTimeKValue;
+                String finalMaxTimeReactionName = maxTimeReactionName;
+                double finalMaxTimeKValue = maxTimeKValue;
+                String finalMaxTimeReactionName1 = maxTimeReactionName;
+                String finalMinTimeReactionName1 = minTimeReactionName;
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
-                        JOptionPane.showMessageDialog(Animo.getCytoscape().getJFrame(), "The difference between the fastest reaction (" + minTimeReactionName + ", parameter K = " + minTimeKValue + ")\nand the slowest reaction (" + maxTimeReactionName + ", parameter K = " + maxTimeKValue + ")\nmay be too large to be properly represented. We advise to reduce such difference\nby either increasing K for " + maxTimeReactionName + " or decreasing K for " + minTimeReactionName + ".", "Parameter space too broad", 2);
+                        JOptionPane.showMessageDialog(Animo.getCytoscape().getJFrame(), "The difference between the fastest reaction (" + finalMinTimeReactionName + ", parameter K = " + finalMinTimeKValue + ")\nand the slowest reaction (" + finalMaxTimeReactionName + ", parameter K = " + finalMaxTimeKValue + ")\nmay be too large to be properly represented. We advise to reduce such difference\nby either increasing K for " + finalMaxTimeReactionName1 + " or decreasing K for " + finalMinTimeReactionName1 + ".", "Parameter space too broad", 2);
                     }
                 });
             }
@@ -669,111 +730,10 @@ public class ModelAnalyzer {
 
             model.getProperties().let("maxTime").be(maxTimeModel);
             model.setMapCytoscapeIDtoReactantID(nodeSUIDToModelId);
-            model.setMapCytoscapeIDtoReactionID(edgeSUIDToModelId);
+            // TODO check if not still required
+//            model.setMapCytoscapeIDtoReactionID(edgeSUIDToModelId);
             return model;
         }
-    }
-
-    public Model getModelFromJsonOld(JSONObject object) throws JSONException, AnimoException {
-        Model result = new Model();
-        result.getProperties().let("time scale factor").setValue((double)1.0F);
-        result.getProperties().let("seconds per point").setValue((double)1.0F);
-        result.getProperties().let("minTime").setValue(0);
-        result.getProperties().let("maxTime").setValue(10000);
-        JSONObject modelData = object.getJSONObject("data");
-
-        for(String field : JSONObject.getNames(modelData)) {
-            Object value = JSONObject.stringToValue(modelData.get(field).toString());
-            result.getProperties().let(field).setValue(value);
-        }
-
-        JSONObject elements = object.getJSONObject("elements");
-        HashMap<String, String> nameToID = new HashMap();
-        JSONArray nodes = elements.getJSONArray("nodes");
-
-        for(int i = 0; i < nodes.length(); ++i) {
-            JSONObject data = nodes.getJSONObject(i).getJSONObject("data");
-            Reactant reactant = new Reactant("n" + data.getString("id"));
-            reactant.let("alias").setValue(reactant.getId());
-
-            for(String field : JSONObject.getNames(data)) {
-                Object value = JSONObject.stringToValue(data.get(field).toString());
-                reactant.let(field).setValue(value);
-            }
-
-            nameToID.put(data.getString("name"), reactant.getId());
-            result.add(reactant);
-        }
-
-        JSONArray edges = elements.getJSONArray("edges");
-
-        for(int i = 0; i < edges.length(); ++i) {
-            JSONObject data = edges.getJSONObject(i).getJSONObject("data");
-            if (data.optBoolean("enabled", true)) {
-                Reaction reaction = new Reaction("e" + data.getString("id"));
-                reaction.let("alias").setValue(reaction.getId());
-                reaction.let("catalyst").setValue("n" + data.getString("source"));
-                reaction.let("reactant").setValue("n" + data.getString("target"));
-                if (data.has("output_reactant")) {
-                    Object value = JSONObject.stringToValue(data.get("output_reactant").toString());
-                    String reactantID;
-                    if (value.getClass() == Integer.class) {
-                        reactantID = "n" + value;
-                    } else {
-                        if (value.getClass() != String.class) {
-                            throw new AnimoException("Wrong class for output_reactant: " + value.getClass());
-                        }
-
-                        reactantID = (String)nameToID.get(value);
-                    }
-
-                    reaction.let("output reactant").setValue(reactantID);
-                } else {
-                    reaction.let("output reactant").setValue(reaction.get("reactant").getValue());
-                }
-
-                for(String field : JSONObject.getNames(data)) {
-                    Object value = JSONObject.stringToValue(data.get(field).toString());
-                    if (field.equals("k")) {
-                        value = data.getDouble(field);
-                    }
-
-                    reaction.let(field).setValue(value);
-                }
-
-                Reactant catalyst = result.getReactant((String)reaction.get("catalyst").as(String.class));
-                Reactant reactant = result.getReactant((String)reaction.get("reactant").as(String.class));
-                double nLevelsCatalyst = ((Integer)catalyst.get("levels").as(Integer.class)).doubleValue();
-                double nLevelsReactant = ((Integer)reactant.get("levels").as(Integer.class)).doubleValue();
-                Integer scenarioIdx = (Integer)reaction.get("scenario").as(Integer.class);
-                double levelsScaleFactor;
-                switch (scenarioIdx) {
-                    case 0:
-                        levelsScaleFactor = (double)1.0F / nLevelsReactant * nLevelsCatalyst;
-                        break;
-                    case 1:
-                        levelsScaleFactor = (double)1.0F * nLevelsCatalyst;
-                        break;
-                    case 2:
-                        String e1ID = "n" + reaction.get("_REACTANT_E1").getValue();
-                        String e2ID = "n" + reaction.get("_REACTANT_E2").getValue();
-                        double nLevelsE1 = ((Integer)result.getReactant(e1ID).get("levels").as(Integer.class)).doubleValue();
-                        double nLevelsE2 = ((Integer)result.getReactant(e2ID).get("levels").as(Integer.class)).doubleValue();
-                        levelsScaleFactor = (double)1.0F / nLevelsReactant * nLevelsE1 * nLevelsE2;
-                        break;
-                    default:
-                        levelsScaleFactor = (double)1.0F;
-                }
-
-                reaction.let("levels scale factor").setValue(levelsScaleFactor);
-                HashMap<String, Double> scenarioParams = new HashMap();
-                scenarioParams.put("k", reaction.get("k").as(Double.class));
-                reaction.let("SCENARIO_CFG").be(new ScenarioCfg(scenarioIdx, scenarioParams));
-                result.add(reaction);
-            }
-        }
-
-        return result;
     }
 
     public JSONObject resultToJSON(SimpleLevelResult result, Model model) throws JSONException {
@@ -784,7 +744,7 @@ public class ModelAnalyzer {
             if (model.getReactant((String)r.getKey()) != null) {
                 JSONArray timePoints = new JSONArray();
 
-                for(Map.Entry<Double, Double> entry : ((SortedMap)r.getValue()).entrySet()) {
+                for(Map.Entry<Double, Double> entry : r.getValue().entrySet()) {
                     JSONObject timePoint = new JSONObject();
                     timePoint.put("x", (Double)entry.getKey() / (tsf * (double)60.0F));
                     timePoint.put("y", entry.getValue());
@@ -796,55 +756,6 @@ public class ModelAnalyzer {
         }
 
         return json;
-    }
-
-    public JSONObject performParameterFitting(Model model, JSONObject request, Consumer<ParameterFitter.CostResult> bestCostListener) throws JSONException, IOException {
-        List<Reaction> reactionsToBeOptimized = new ArrayList();
-        JSONArray reactions = request.getJSONArray("reactions");
-
-        for(Reaction reaction : model.getReactionCollection()) {
-            for(int i = 0; i < reactions.length(); ++i) {
-                String reactionID = reactions.getString(i);
-                if (reaction.getId().equals(reactionID)) {
-                    reactionsToBeOptimized.add(reaction);
-                }
-            }
-        }
-
-        String name = Integer.toString(this.random.nextInt());
-        File tempCsvFile = File.createTempFile(name, ".csv");
-        Files.write(request.getString("referenceData"), tempCsvFile, Charset.defaultCharset());
-        String referenceDataFile = tempCsvFile.getAbsolutePath();
-        SortedMap<Reactant, String> reactantToDataCorrespondence = new TreeMap();
-        JSONArray reactantToReferenceJson = request.getJSONArray("reactantToReferenceData");
-
-        for(int i = 0; i < reactantToReferenceJson.length(); ++i) {
-            JSONObject correspondence = reactantToReferenceJson.getJSONObject(i);
-            Reactant reactant = model.getReactant(correspondence.getString("reactantID"));
-            reactantToDataCorrespondence.put(reactant, correspondence.getString("columnName"));
-        }
-
-        Properties parameters = new Properties();
-        if (request.has("params")) {
-            JSONObject params = request.getJSONObject("params");
-
-            for(String param : JSONObject.getNames(params)) {
-                parameters.setProperty(param, params.getString(param));
-            }
-        }
-
-        int timeTo = request.getInt("minutesToSimulate");
-        HashMap<String, Supplier<ParameterFitter>> fitters = new HashMap();
-        fitters.put("lma", (Supplier)() -> new LevenbergMarquardtFitter(model, reactionsToBeOptimized, referenceDataFile, reactantToDataCorrespondence, timeTo, parameters));
-       ParameterFitter fitter = (ParameterFitter)((Supplier)fitters.get(request.optString("algorithm", "genetic"))).get();
-        if (bestCostListener != null) {
-            fitter.registerObserver(bestCostListener);
-        }
-
-        fitter.performHeadlessParameterFitting();
-        JSONObject result = this.parametersToJson(fitter.getReactionParameters());
-        tempCsvFile.delete();
-        return result;
     }
 
     public JSONObject parametersToJson(Map<Reaction, Map<String, Double>> reactionParameters) throws JSONException {

@@ -66,22 +66,25 @@ public class HeadlessMain {
 
             if (HeadlessMain.RequestType.PARAMFIT_IMMEDIATE.name.equals(analyzeType)) {
                 File file = new File("pf_inter_results/" + request.getString("result_id") + ".json");
-                JSONObject result = analyzer.performParameterFitting(model, request, (c) -> {
-                    try {
-                        if (c.isBestResult) {
-                            JSONObject interResult = new JSONObject();
-                            interResult.put("simulation", analyzer.resultToJSON(c.result, model));
-                            interResult.put("cost", c.cost);
-                            interResult.put("parameters", analyzer.parametersToJson(c.getFitter().getReactionParameters()));
-                            Files.write(interResult.toString(), file, Charset.defaultCharset());
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                });
+                JSONObject result = analyzer.performParameterFitting(model, request
+                        // TODO replace with something
+//                        , (c) -> {
+//                    try {
+//                        if (c.isBestResult) {
+//                            JSONObject interResult = new JSONObject();
+//                            interResult.put("simulation", analyzer.resultToJSON(c.result, model));
+//                            interResult.put("cost", c.cost);
+//                            interResult.put("parameters", analyzer.parametersToJson(c.getFitter().getReactionParameters()));
+//                            Files.write(interResult.toString(), file, Charset.defaultCharset());
+//                        }
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                }
+                );
                 System.out.println(result);
                 file.delete();
             }
