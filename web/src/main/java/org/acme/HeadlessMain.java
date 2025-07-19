@@ -44,7 +44,7 @@ public class HeadlessMain {
             }
 
             JSONObject request = new JSONObject(new JSONTokener(new FileInputStream(args[0])));
-            Model model = analyzer.getModelFromJson(request.getJSONObject("model"), request.getDouble("minutesToSimulate"));
+            Model model = ModelAnalyzer.getModelFromJson(request.getJSONObject("model"), request.getDouble("minutesToSimulate"));
             String analyzeType = request.optString("type", HeadlessMain.RequestType.SIMULATE.name);
             if (HeadlessMain.RequestType.SIMULATE.name.equals(analyzeType)) {
                 SimpleLevelResult result = analyzer.simulateModel(model, request.getDouble("minutesToSimulate"));

@@ -60,3 +60,12 @@ If you want to learn more about building native executables, please consult <htt
 Easily start your REST Web Services
 
 [Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+
+
+## TODO
+
+- [ ] Think how job updates happen:
+
+use a multi?? with an manageded executor service that runs the job and sends updates to the client via SSE
+
+- [ ] Job updates are sent to the client via SSE

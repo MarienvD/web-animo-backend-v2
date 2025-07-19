@@ -124,7 +124,7 @@ public class ModelAnalyzer {
         return request;
     }
 
-    public Model getModelFromJson(JSONObject object, Double nMinutesToSimulate) throws JSONException, AnimoException {
+    public static Model getModelFromJson(JSONObject object, Double nMinutesToSimulate) throws JSONException, AnimoException {
         Model model = new Model();
         Map<Long, String> nodeSUIDToModelId = new HashMap();
         Map<Long, String> edgeSUIDToModelId = new HashMap();
