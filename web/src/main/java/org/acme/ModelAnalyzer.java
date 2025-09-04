@@ -57,7 +57,7 @@ public class ModelAnalyzer {
         }
     }
 
-    public SimpleLevelResult simulateModel(Model model, double nMinutesToSimulate) throws AnalysisException {
+    public SimpleLevelResult simulateModel(Model model, int nMinutesToSimulate) throws AnalysisException {
         if (model.getReactionCollection().isEmpty()) {
             throw new AnalysisException("The model to be simulated requires at least one reaction");
         } else {
@@ -124,7 +124,7 @@ public class ModelAnalyzer {
         return request;
     }
 
-    public static Model getModelFromJson(JSONObject object, Double nMinutesToSimulate) throws JSONException, AnimoException {
+    public static Model getModelFromJson(JSONObject object, Integer nMinutesToSimulate) throws JSONException, AnimoException {
         Model model = new Model();
         Map<Long, String> nodeSUIDToModelId = new HashMap();
         Map<Long, String> edgeSUIDToModelId = new HashMap();
