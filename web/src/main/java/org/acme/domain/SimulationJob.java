@@ -1,11 +1,9 @@
 package org.acme.domain;
 
-import org.json.JSONObject;
-
 public class SimulationJob {
     private final String id;
     private Integer minutesToSimulate;
-    private JSONObject model;
+    private CytoscapeModel model;
 
     public SimulationJob(String id) {
         this.id = id;
@@ -23,11 +21,11 @@ public class SimulationJob {
         this.minutesToSimulate = minutesToSimulate;
     }
 
-    public JSONObject getModel() {
+    public CytoscapeModel getModel() {
         return model;
     }
 
-    public void setModel(JSONObject model) {
+    public void setModel(CytoscapeModel model) {
         this.model = model;
     }
 }

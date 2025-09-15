@@ -4,10 +4,7 @@ import animo.core.AnimoBackend;
 import animo.core.analyser.AnalysisException;
 import animo.core.analyser.uppaal.SimpleLevelResult;
 import animo.core.analyser.uppaal.UppaalModelAnalyserSMC;
-import animo.core.model.Model;
-import animo.core.model.Reactant;
-import animo.core.model.Reaction;
-import animo.core.model.Scenario;
+import animo.core.model.*;
 import animo.cytoscape.Animo;
 import animo.cytoscape.AnimoActionTask;
 import animo.exceptions.AnimoException;
@@ -15,7 +12,6 @@ import animo.fitting.ParameterFitter;
 import animo.fitting.ScenarioCfg;
 import animo.fitting.levenbergmarquardt.LevenbergMarquardtFitter;
 import animo.util.Utilities;
-import animo.util.XmlConfiguration;
 import com.google.common.io.Files;
 import org.cytoscape.work.TaskMonitor;
 import org.json.JSONArray;
@@ -35,7 +31,6 @@ import java.util.Properties;
 import java.util.Random;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -141,11 +136,13 @@ public class ModelAnalyzer {
         HashMap<String, String> nameToID = new HashMap();
         Double secondsPerPoint = modelData.optDouble("seconds per point", modelData.optDouble("seconds_per_point", (double)1.0F));
         double timeScaleFactor = modelData.optDouble("time scale factor", (double)1.0F / secondsPerPoint);
-        XmlConfiguration configuration = AnimoBackend.get().configuration();
-        String modelType = configuration.get("/ANIMO/ModelType", (String)null);
-        if (modelType.equals("ODEforUPPAAL")) {
-            timeScaleFactor = (double)1.0F;
-        }
+        // TODO marien get config
+//        XmlConfiguration configuration = AnimoBackend.get().configuration();
+
+//        String modelType = configuration.get("/ANIMO/ModelType", (String)null);
+//        if (modelType.equals("ODEforUPPAAL")) {
+//            timeScaleFactor = (double)1.0F;
+//        }
 
         model.getProperties().let("time scale factor").be(timeScaleFactor);
         model.getProperties().let("seconds per point").be(secondsPerPoint);
@@ -224,11 +221,12 @@ public class ModelAnalyzer {
             int maxTimeModel = Integer.MIN_VALUE;
             double uncertainty = (double)0.0F;
 
-            try {
-                uncertainty = (double)Integer.valueOf(AnimoBackend.get().configuration().get("/ANIMO/Uncertainty"));
-            } catch (NumberFormatException var75) {
-                uncertainty = (double)0.0F;
-            }
+            // TODO marien fix config (from properties or input)
+//            try {
+//                uncertainty = (double)Integer.valueOf(AnimoBackend.get().configuration().get("/ANIMO/Uncertainty"));
+//            } catch (NumberFormatException var75) {
+//                uncertainty = (double)0.0F;
+//            }
 
             JSONArray edges = elements.getJSONArray("edges");
 

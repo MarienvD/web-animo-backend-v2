@@ -46,7 +46,7 @@ public class HeadlessMain {
 
             JSONObject request = new JSONObject(new JSONTokener(new FileInputStream(args[0])));
             Model model = ModelAnalyzer.getModelFromJson(request.getJSONObject("model"), request.getInt("minutesToSimulate"));
-           executeFromRequest(analyzer, request, model);
+            executeFromRequest(analyzer, request, model);
 
             interruptThread.interrupt();
         } catch (Exception var12) {
@@ -66,12 +66,13 @@ public class HeadlessMain {
 
     }
 
-    public static void executeFromRequest(ModelAnalyzer analyzer, JSONObject request, Model model) throws JSONException, AnalysisException, IOException {
+    public static JSONObject executeFromRequest(ModelAnalyzer analyzer, JSONObject request, Model model) throws JSONException, AnalysisException, IOException {
         String analyzeType = request.optString("type", HeadlessMain.RequestType.SIMULATE.name);
         if (HeadlessMain.RequestType.SIMULATE.name.equals(analyzeType)) {
             SimpleLevelResult result = analyzer.simulateModel(model, request.getInt("minutesToSimulate"));
-            JSONObject json = analyzer.resultToJSON(result, model);
+            JSONObject json = new JSONObject(result);
             System.out.println(json);
+            return json;
         }
 
         if (HeadlessMain.RequestType.PARAMFIT_STARTPROCESS.name.equals(analyzeType)) {
@@ -83,7 +84,7 @@ public class HeadlessMain {
             builder.start();
             JSONObject result = new JSONObject();
             result.put("result_id", id);
-            System.out.println(result);
+            return null;
         }
 
         if (HeadlessMain.RequestType.PARAMFIT_IMMEDIATE.name.equals(analyzeType)) {
@@ -110,6 +111,7 @@ public class HeadlessMain {
             System.out.println(result);
             file.delete();
         }
+        return null;
     }
 
     static {
