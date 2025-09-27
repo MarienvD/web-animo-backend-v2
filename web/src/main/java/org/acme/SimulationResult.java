@@ -5,8 +5,10 @@ import animo.core.analyser.uppaal.SimpleLevelResult;
 public class SimulationResult {
     private String jobId;
     private String result;
+    private String clientId;
 
-    public SimulationResult(String jobId, String result) {
+    public SimulationResult(String jobId, String result, String clientId) {
+        this.clientId = clientId;
         this.jobId = jobId;
         this.result = result;
     }
@@ -25,5 +27,12 @@ public class SimulationResult {
 
     public void setResult(String result) {
         this.result = result;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
 }

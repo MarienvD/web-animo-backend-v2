@@ -17,14 +17,17 @@ public class JobResource {
     JobManager jobManager;
 
     @POST
-    public Response submit(SimulationJob job) {
+    public Response submit(@QueryParam("clientId") String clientId, @QueryParam("token") String token, SimulationJob job) {
+        job.setClientId(clientId);
+        job.setToken(token);
         return jobManager.submitJob(job);
     }
 
     @GET
     @Produces(MediaType.SERVER_SENT_EVENTS)
     @RestStreamElementType(MediaType.APPLICATION_JSON)
-    public Multi<SimulationResult> fights() {
-        return jobManager.stream();
+    public Multi<SimulationResult> fights(@QueryParam("clientId") String clientId, @QueryParam("token") String token) {
+        return jobManager.stream()
+                .filter(result -> clientId.equals(result.getClientId()));
     }
 }

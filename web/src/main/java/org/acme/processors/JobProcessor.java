@@ -52,6 +52,6 @@ public class JobProcessor {
         JSONObject jsonModel = new JSONObject(request.getModel());
         Model model = ModelAnalyzer.getModelFromJson(jsonModel, request.getMinutesToSimulate());
         JSONObject result = HeadlessMain.executeFromRequest(new ModelAnalyzer(), new JSONObject(request), model);
-        return new SimulationResult(request.getId(), result.toString());
+        return new SimulationResult(request.getId(), result.toString(), request.getClientId());
     }
 }
