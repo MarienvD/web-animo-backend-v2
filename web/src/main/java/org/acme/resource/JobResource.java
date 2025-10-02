@@ -16,8 +16,9 @@ public class JobResource {
     @Inject
     JobManager jobManager;
 
+    // TODO use token to verify client Id
     @POST
-    public Response submit(@QueryParam("clientId") String clientId, @QueryParam("token") String token, SimulationJob job) {
+    public Response submit(@HeaderParam("clientId") String clientId, @HeaderParam("token") String token, SimulationJob job) {
         job.setClientId(clientId);
         job.setToken(token);
         return jobManager.submitJob(job);
@@ -26,7 +27,10 @@ public class JobResource {
     @GET
     @Produces(MediaType.SERVER_SENT_EVENTS)
     @RestStreamElementType(MediaType.APPLICATION_JSON)
-    public Multi<SimulationResult> fights(@QueryParam("clientId") String clientId, @QueryParam("token") String token) {
+    public Multi<SimulationResult> fights(@HeaderParam("clientId") String clientId, @HeaderParam("token") String token) {
+        if (clientId == null || clientId.isEmpty()) {
+            return Multi.createFrom().failure(() -> new IllegalArgumentException("clientId is null or empty"));
+        }
         return jobManager.stream()
                 .filter(result -> clientId.equals(result.getClientId()));
     }
