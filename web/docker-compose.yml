@@ -1,11 +1,12 @@
 services:
-  grafana:
-    image: grafana/grafana-enterprise
-    container_name: grafana
+  redis:
+    image: redis
     restart: unless-stopped
     ports:
-      - '3000:3000'
-    volumes:
-      - grafana-storage:/var/lib/grafana
-volumes:
-  grafana-storage: {}
+      - '6379:6379'
+  webanimo:
+    image: uppaal-5.1.0
+    ports:
+      - '8080:8080'
+    environment:
+      - animo.config.file.path=/etc/animo/ANIMO_configuration.xml
