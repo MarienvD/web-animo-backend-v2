@@ -78,6 +78,20 @@
 #   accessed directly. (example: "foo.example.com,bar.example.com")
 #
 ###
+FROM ubuntu:latest AS verifyta
+
+RUN useradd -ms /bin/bash uppaal
+RUN apt-get -qq update && apt-get -qq upgrade
+RUN apt-get install -y unzip
+
+USER uppaal
+ENV USER=uppaal
+
+WORKDIR /home/uppaal
+ADD --chown=uppaal:uppaal https://download.uppaal.org/uppaal-5.1/uppaal-5.1.0/uppaal-5.1.0-beta5-linux64.zip /tmp/uppaal/
+RUN unzip /tmp/uppaal/uppaal-5.1.0-beta5-linux64.zip -d /tmp/uppaal
+RUN cp -RT /tmp/uppaal/uppaal-5.1.0-beta5-linux64 /home/uppaal/uppaal
+
 FROM registry.access.redhat.com/ubi9/openjdk-17:1.21
 
 ENV LANGUAGE='en_US:en'
@@ -88,6 +102,20 @@ COPY --chown=185 target/quarkus-app/lib/ /deployments/lib/
 COPY --chown=185 target/quarkus-app/*.jar /deployments/
 COPY --chown=185 target/quarkus-app/app/ /deployments/app/
 COPY --chown=185 target/quarkus-app/quarkus/ /deployments/quarkus/
+
+#Copy Uppaal files
+COPY --chown=185 --from=verifyta /home/uppaal/uppaal /opt/uppaal
+RUN ls -al /opt/uppaal
+
+ENV PATH="/opt/uppaal/bin:$PATH"
+ARG KEY=""
+ARG LEASE="1"
+
+RUN verifyta.sh --key ${KEY} --lease ${LEASE}
+RUN verifyta.sh --version
+
+# Copy ANIMO config file
+COPY --chown=185 ANIMO_configuration.xml/ /etc/animo/ANIMO_configuration.xml
 
 EXPOSE 8080
 USER 185
