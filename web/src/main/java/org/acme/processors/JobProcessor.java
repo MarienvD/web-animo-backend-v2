@@ -11,6 +11,7 @@ import org.acme.HeadlessMain;
 import org.acme.ModelAnalyzer;
 import org.acme.SimulationResult;
 import org.acme.domain.SimulationJob;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logging.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,6 +27,9 @@ public class JobProcessor {
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(JobProcessor.class);
     private final PubSubCommands<SimulationResult> publisher;
     private final Logger logger;
+
+    @ConfigProperty(name = "animo.config.file.path")
+    String configFilePath;
 
     public JobProcessor(Logger logger, RedisDataSource ds) {
         this.logger = logger;
@@ -51,7 +55,7 @@ public class JobProcessor {
     public SimulationResult simulate(SimulationJob request) throws AnimoException, JSONException, IOException {
         JSONObject jsonModel = new JSONObject(request.getModel());
         Model model = ModelAnalyzer.getModelFromJson(jsonModel, request.getMinutesToSimulate());
-        JSONObject result = HeadlessMain.executeFromRequest(new ModelAnalyzer(), new JSONObject(request), model);
+        JSONObject result = HeadlessMain.executeFromRequest(new ModelAnalyzer(configFilePath), new JSONObject(request), model);
         return new SimulationResult(request.getId(), result.toString(), request.getClientId());
     }
 }

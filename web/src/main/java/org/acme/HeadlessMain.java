@@ -23,49 +23,6 @@ public class HeadlessMain {
     public static final int MAX_ANALYZE_MILLIS;
     private static Random random = new Random();
 
-    public static void main(String[] args) throws JSONException {
-        AtomicBoolean interrupted = new AtomicBoolean(false);
-
-        try {
-            Thread workThread = Thread.currentThread();
-            Thread interruptThread = new Thread(() -> {
-                try {
-                    Thread.sleep((long)MAX_ANALYZE_MILLIS);
-                    interrupted.set(true);
-                    workThread.interrupt();
-                } catch (Exception var3) {
-                }
-
-            });
-            interruptThread.setDaemon(true);
-            interruptThread.start();
-            ModelAnalyzer analyzer = new ModelAnalyzer();
-            if (args.length != 1) {
-                throw new IllegalArgumentException("invalid number of args: " + args.length);
-            }
-
-            JSONObject request = new JSONObject(new JSONTokener(new FileInputStream(args[0])));
-            Model model = ModelAnalyzer.getModelFromJson(request.getJSONObject("model"), request.getInt("minutesToSimulate"));
-            executeFromRequest(analyzer, request, model);
-
-            interruptThread.interrupt();
-        } catch (Exception var12) {
-            JSONObject exceptionJSON = new JSONObject();
-            exceptionJSON.put("error", true);
-            if (interrupted.get()) {
-                exceptionJSON.put("message", "Analysis took too long\n(more than " + MAX_ANALYZE_MILLIS / 1000 + " seconds)");
-            } else {
-                exceptionJSON.put("message", var12.getMessage());
-            }
-
-            exceptionJSON.put("cause", var12.getCause());
-            String stackTrace = (String)Arrays.asList(var12.getStackTrace()).stream().map((se) -> se.toString()).reduce((s1, s2) -> s1 + "\n" + s2).get();
-            exceptionJSON.put("stacktrace", stackTrace);
-            System.out.println(exceptionJSON);
-        }
-
-    }
-
     public static JSONObject executeFromRequest(ModelAnalyzer analyzer, JSONObject request, Model model) throws JSONException, AnalysisException, IOException {
         String analyzeType = request.optString("type", HeadlessMain.RequestType.SIMULATE.name);
         if (HeadlessMain.RequestType.SIMULATE.name.equals(analyzeType)) {
