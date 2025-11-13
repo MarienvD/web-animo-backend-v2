@@ -1,11 +1,11 @@
 services:
   redis:
-    image: redis
+    image:  harbor.utsp.utwente.nl/library/redis-webanimo-custom:1.0.0
     restart: unless-stopped
     ports:
       - '6379:6379'
   webanimo:
-    image: uppaal-5.1.0
+    image:  harbor.utsp.utwente.nl/library/webanimo-uppaal-5.1.0:1.0.0
     ports:
       - '8080:8080'
     environment:

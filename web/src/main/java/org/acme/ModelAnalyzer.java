@@ -13,10 +13,13 @@ import animo.fitting.ScenarioCfg;
 import animo.fitting.levenbergmarquardt.LevenbergMarquardtFitter;
 import animo.util.Utilities;
 import com.google.common.io.Files;
+import org.acme.processors.JobProcessor;
 import org.cytoscape.work.TaskMonitor;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,11 +39,9 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 public class ModelAnalyzer {
-    private Random random;
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(ModelAnalyzer.class);
 
-    public ModelAnalyzer() throws AnimoException {
-        this("ANIMO_configuration.xml");
-    }
+    private Random random;
 
     public ModelAnalyzer(String configPath) throws AnimoException {
         this.random = new Random();
@@ -48,6 +49,7 @@ public class ModelAnalyzer {
         if (!configFile.exists()) {
             throw new AnimoException("Animo config file not does not exist");
         } else {
+            log.info("Loading config file: " + configFile.getAbsolutePath());
             AnimoBackend.initialise(configFile);
         }
     }

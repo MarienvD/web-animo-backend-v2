@@ -69,3 +69,9 @@ Easily start your REST Web Services
 use a multi?? with an manageded executor service that runs the job and sends updates to the client via SSE
 
 - [ ] Job updates are sent to the client via SSE
+
+```shell
+  mvn package
+  docker image build --build-arg KEY=c59c14ac-2d66-4da6-82c8-13b419016c1e --tag uppaal-5.1.0 -f src/main/docker/Dockerfile.jvm .                                
+  podman compose up -d
+```

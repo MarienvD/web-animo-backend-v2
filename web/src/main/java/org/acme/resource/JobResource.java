@@ -27,7 +27,7 @@ public class JobResource {
     @GET
     @Produces(MediaType.SERVER_SENT_EVENTS)
     @RestStreamElementType(MediaType.APPLICATION_JSON)
-    public Multi<SimulationResult> fights(@HeaderParam("clientId") String clientId, @HeaderParam("token") String token) {
+    public Multi<SimulationResult> fights(@HeaderParam("clientId") String clientId) {
         if (clientId == null || clientId.isEmpty()) {
             return Multi.createFrom().failure(() -> new IllegalArgumentException("clientId is null or empty"));
         }

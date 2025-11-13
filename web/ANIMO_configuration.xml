@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <ANIMO>
   <UppaalInvoker>
-    <verifyta>C:\Applications\uppaal-5.0.0-win64\bin\verifyta.exe</verifyta>
+    <verifyta>/opt/uppaal/bin/verifyta.sh</verifyta>
   </UppaalInvoker>
   <Developer>false</Developer>
   <Uncertainty>0</Uncertainty>
