@@ -115,7 +115,7 @@ RUN verifyta.sh --key ${KEY} --lease ${LEASE}
 RUN verifyta.sh --version
 
 # Copy ANIMO config file
-COPY --chown=185 ANIMO_configuration.xml/ /etc/animo/ANIMO_configuration.xml
+COPY --chown=185 src/main/resources/ANIMO_configuration.xml/ /etc/animo/ANIMO_configuration.xml
 
 EXPOSE 8080
 USER 185
