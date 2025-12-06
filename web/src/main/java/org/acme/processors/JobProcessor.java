@@ -2,10 +2,12 @@ package org.acme.processors;
 
 import animo.core.model.Model;
 import animo.exceptions.AnimoException;
-import io.quarkus.redis.datasource.RedisDataSource;
-import io.quarkus.redis.datasource.pubsub.PubSubCommands;
+import io.quarkus.redis.datasource.ReactiveRedisDataSource;
+import io.quarkus.redis.datasource.keys.ReactiveKeyCommands;
+import io.quarkus.redis.datasource.pubsub.ReactivePubSubCommands;
 import io.quarkus.vertx.ConsumeEvent;
 import io.smallrye.common.annotation.Blocking;
+import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.acme.HeadlessMain;
 import org.acme.ModelAnalyzer;
@@ -25,31 +27,33 @@ import static java.lang.Thread.sleep;
 public class JobProcessor {
 
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(JobProcessor.class);
-    private final PubSubCommands<SimulationResult> publisher;
+    private final ReactivePubSubCommands<SimulationResult> publisher;
+    private ReactiveKeyCommands<String> keyCommands;
+
     private final Logger logger;
 
     @ConfigProperty(name = "animo.config.file.path")
     String configFilePath;
 
-    public JobProcessor(Logger logger, RedisDataSource ds) {
+    public JobProcessor(Logger logger, ReactiveRedisDataSource ds) {
         this.logger = logger;
         this.publisher = ds.pubsub(SimulationResult.class);
     }
 
     @ConsumeEvent("job-request")
-    @Blocking
-    String consumeJob(SimulationJob item) {
+    Uni<Void> consumeJob(SimulationJob item) {
         if (item != null) {
             logger.infof("Simulator %s is going to simulate", item);
-            SimulationResult result = null;
+            SimulationResult result;
             try {
                 result = simulate(item);
-                publisher.publish("job-results", result);
+
+                return publisher.publish("job-results", result);
             } catch (Exception e) {
                 logger.errorf("Simulator %s failed to simulate %s", item, e);
             }
         }
-        return "OK";
+        return Uni.createFrom().voidItem();
     }
 
     public SimulationResult simulate(SimulationJob request) throws AnimoException, JSONException, IOException {
