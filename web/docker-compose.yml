@@ -1,12 +1,17 @@
 services:
   redis:
-    image:  harbor.utsp.utwente.nl/library/redis-webanimo-custom:1.0.0
+    image:  harbor.utsp.utwente.nl/library/redis-webanimo-custom:latest
     restart: unless-stopped
     ports:
-      - '6379:6379'
-  webanimo:
-    image:  harbor.utsp.utwente.nl/library/webanimo-uppaal-5.1.0:1.0.0
+      - '6379'
+  quarkus:
+    image:  harbor.utsp.utwente.nl/library/webanimo-uppaal-5.1.0:latest
     ports:
       - '8080:8080'
     environment:
       - animo.config.file.path=/etc/animo/ANIMO_configuration.xml
+      - quarkus.log.level=DEBUG
+  webanimo-angular:
+    image: webanimo-5.1.0:latest
+    ports:
+      - '8081:8081'
