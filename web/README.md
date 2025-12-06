@@ -72,6 +72,9 @@ use a multi?? with an manageded executor service that runs the job and sends upd
 
 ```shell
   mvn package
-  docker image build --build-arg KEY=c59c14ac-2d66-4da6-82c8-13b419016c1e --tag uppaal-5.1.0 -f src/main/docker/Dockerfile.jvm .                                
-  podman compose up -d
+  docker image build --build-arg KEY=c59c14ac-2d66-4da6-82c8-13b419016c1e --tag webanimo-uppaal-5.1.0 -f src/main/docker/Dockerfile.jvm .                                
+  docker tag webanimo-uppaal-5.1.0 harbor.utsp.utwente.nl/library/webanimo-uppaal-5.1.0:latest
+  docker image pull redis
+  docker tag redis harbor.utsp.utwente.nl/library/redis-webanimo-custom:latest
+  docker compose up -d
 ```
