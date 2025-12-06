@@ -138,13 +138,6 @@ public class ModelAnalyzer {
         HashMap<String, String> nameToID = new HashMap();
         Double secondsPerPoint = modelData.optDouble("seconds per point", modelData.optDouble("seconds_per_point", (double)1.0F));
         double timeScaleFactor = modelData.optDouble("time scale factor", (double)1.0F / secondsPerPoint);
-        // TODO marien get config
-//        XmlConfiguration configuration = AnimoBackend.get().configuration();
-
-//        String modelType = configuration.get("/ANIMO/ModelType", (String)null);
-//        if (modelType.equals("ODEforUPPAAL")) {
-//            timeScaleFactor = (double)1.0F;
-//        }
 
         model.getProperties().let("time scale factor").be(timeScaleFactor);
         model.getProperties().let("seconds per point").be(secondsPerPoint);
