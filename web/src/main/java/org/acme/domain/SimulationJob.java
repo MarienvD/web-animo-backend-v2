@@ -7,6 +7,17 @@ public class SimulationJob {
     private String clientId;
     private String token;
 
+    @Override
+    public String toString() {
+        return "SimulationJob{" +
+                "id='" + id + '\'' +
+                ", minutesToSimulate=" + minutesToSimulate +
+                ", model=" + model +
+                ", clientId='" + clientId + '\'' +
+                ", token='" + token + '\'' +
+                '}';
+    }
+
     public SimulationJob(String id) {
         this.id = id;
     }

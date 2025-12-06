@@ -2,6 +2,8 @@ package org.acme.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Arrays;
+
 public class NetworkData {
     @JsonProperty("shared_name")
     public String sharedName;
@@ -20,6 +22,20 @@ public class NetworkData {
 
     public boolean selected;
     public int levels;
+
+    @Override
+    public String toString() {
+        return "NetworkData{" +
+                "sharedName='" + sharedName + '\'' +
+                ", annotations=" + Arrays.toString(annotations) +
+                ", networkMetadata='" + networkMetadata + '\'' +
+                ", name='" + name + '\'' +
+                ", suid=" + suid +
+                ", secondsPerPoint=" + secondsPerPoint +
+                ", selected=" + selected +
+                ", levels=" + levels +
+                '}';
+    }
 
     public String getSharedName() {
         return sharedName;

@@ -14,6 +14,13 @@ public class CytoscapeModel extends GraphModel {
 
     private NetworkData data;
 
+    @Override
+    public String toString() {
+        return "CytoscapeModel{" +
+                "data=" + data +
+                '}';
+    }
+
     public String getFormatVersion() {
         return formatVersion;
     }

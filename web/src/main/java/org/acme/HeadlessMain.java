@@ -28,7 +28,6 @@ public class HeadlessMain {
         if (HeadlessMain.RequestType.SIMULATE.name.equals(analyzeType)) {
             SimpleLevelResult result = analyzer.simulateModel(model, request.getInt("minutesToSimulate"));
             JSONObject json = new JSONObject(result);
-            System.out.println(json);
             return json;
         }
 
