@@ -27,7 +27,7 @@ public class JobManager {
     }
 
     public Response submitJob(SimulationJob request) {
-        bus.requestAndForget("job-request", request);
+        bus.send("job-request", request);
         return null;
     }
 

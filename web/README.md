@@ -77,4 +77,8 @@ use a multi?? with an manageded executor service that runs the job and sends upd
   docker image pull redis
   docker tag redis harbor.utsp.utwente.nl/library/redis-webanimo-custom:latest
   docker compose up -d
+  
+#  push to docker
+  docker tag webanimo-uppaal-5.1.0 marien99/webanimo-backend:latest
+  docker push marien99/webanimo-backend:latest
 ```
