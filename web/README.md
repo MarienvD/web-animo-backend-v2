@@ -81,4 +81,20 @@ use a multi?? with an manageded executor service that runs the job and sends upd
 #  push to docker
   docker tag webanimo-uppaal-5.1.0 marien99/webanimo-backend:latest
   docker push marien99/webanimo-backend:latest
+  
+  # deploy on k8s
+   kubectl create deployment web-animo-v2 --image=marien99/webanimo-backend:latest
+  kubectl expose deployment quarkus --type=LoadBalancer --port=8080     
+  
+  # replace image
+  kubectl set image deployments/kubernetes-bootcamp kubernetes-bootcamp=docker.io/jocatalin/kubernetes-bootcamp:v2
+
+  kubectl apply -f .\kompose-output\kompose.ym
+  
+  # info
+  kubectl config use-context docker-desktop
+  kubectl config use-context cluster-k81y
+  kubectl logs -f -l app=quarkus --all-containers=true  
+   kubectl logs -f quarkus-6884dd45f4-8r882
+  kubectl cluster-info dump
 ```

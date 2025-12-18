@@ -47,7 +47,7 @@ public class ModelAnalyzer {
         this.random = new Random();
         File configFile = new File(configPath);
         if (!configFile.exists()) {
-            throw new AnimoException("Animo config file not does not exist");
+            throw new AnimoException("Animo config file not does not exist at " + configPath);
         } else {
             log.info("Loading config file: " + configFile.getAbsolutePath());
             AnimoBackend.initialise(configFile);
