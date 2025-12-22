@@ -97,4 +97,8 @@ use a multi?? with an manageded executor service that runs the job and sends upd
   kubectl logs -f -l app=quarkus --all-containers=true  
    kubectl logs -f quarkus-6884dd45f4-8r882
   kubectl cluster-info dump
+  
+  # helm chart
+  helm repo add bitnami https://charts.bitnami.com/bitnami
 ```
+

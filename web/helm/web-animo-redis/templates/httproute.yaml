@@ -1,12 +1,12 @@
 {{- if .Values.httpRoute.enabled -}}
-{{- $fullName := include "animo-workflow.fullname" . -}}
+{{- $fullName := include "web-animo-redis.fullname" . -}}
 {{- $svcPort := .Values.service.port -}}
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: {{ $fullName }}
   labels:
-    {{- include "animo-workflow.labels" . | nindent 4 }}
+    {{- include "web-animo-redis.labels" . | nindent 4 }}
   {{- with .Values.httpRoute.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}

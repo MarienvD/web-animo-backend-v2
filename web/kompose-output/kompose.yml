@@ -56,7 +56,7 @@ spec:
               value: /etc/animo/ANIMO_configuration.xml
             - name: quarkus.log.level
               value: DEBUG
-          image: marien99/webanimo-backend:latest
+          image: marien99/webanimo-backend:1.0.1
           name: quarkus
           ports:
             - containerPort: 8080
