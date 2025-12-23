@@ -89,7 +89,7 @@ use a multi?? with an manageded executor service that runs the job and sends upd
   # replace image
   kubectl set image deployments/kubernetes-bootcamp kubernetes-bootcamp=docker.io/jocatalin/kubernetes-bootcamp:v2
 
-  kubectl apply -f .\kompose-output\kompose.ym
+  kubectl apply -f .\kompose-output\kompose.yml
   
   # info
   kubectl config use-context docker-desktop
@@ -100,5 +100,10 @@ use a multi?? with an manageded executor service that runs the job and sends upd
   
   # helm chart
   helm repo add bitnami https://charts.bitnami.com/bitnami
+  helm install web-animo-frontend --generate-name
+  
+  helm install web-animo-backend --generate-name     
+  
+   helm upgrade web-animo-backend-1766478709 web-animo-backend 
 ```
 

@@ -1,15 +1,12 @@
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "web-animo-backend.fullname" . }}
-  labels:
-    {{- include "web-animo-backend.labels" . | nindent 4 }}
+  name: quarkus
 spec:
-  type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
+    - name: "8080"
+      port: 8080
+      targetPort: 8080
   selector:
-    {{- include "web-animo-backend.selectorLabels" . | nindent 4 }}
+    app: quarkus
