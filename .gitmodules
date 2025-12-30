@@ -1,0 +1,3 @@
+[submodule "animo3"]
+	path = animo3
+	url = ssh://MarienvD@bitbucket.org/sschivo/animo3.git
