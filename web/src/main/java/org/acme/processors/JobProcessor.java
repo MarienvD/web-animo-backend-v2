@@ -44,11 +44,16 @@ public class JobProcessor {
     Uni<Void> consumeJob(SimulationJob item) {
         if (item != null) {
             logger.infof("Simulator %s is going to simulate", item);
-            SimulationResult result;
             try {
-                result = simulate(item);
-
-                return publisher.publish("job-results", result);
+                return Uni.createFrom().item(() -> {
+                            try {
+                                SimulationResult simulationResult = simulate(item);
+                                return publisher.publish("job-results", simulationResult);
+                            } catch (AnimoException | JSONException | IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        })
+                        .replaceWithVoid();
             } catch (Exception e) {
                 logger.errorf("Simulator %s failed to simulate %s", item, e);
             }
