@@ -105,5 +105,8 @@ use a multi?? with an manageded executor service that runs the job and sends upd
   helm install web-animo-backend --generate-name     
   
    helm upgrade web-animo-backend-1766478709 web-animo-backend 
+   
+    kubectl logs deployment/quarkus --all-pods=true
+    kubectl get pods -n default -l app=quarkus -o wide
 ```
 
