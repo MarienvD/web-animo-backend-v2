@@ -8,6 +8,8 @@ import io.quarkus.redis.datasource.pubsub.ReactivePubSubCommands;
 import io.quarkus.vertx.ConsumeEvent;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.mutiny.Uni;
+import io.smallrye.mutiny.infrastructure.Infrastructure;
+import io.vertx.mutiny.redis.client.RedisAPI;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.acme.HeadlessMain;
 import org.acme.ModelAnalyzer;
@@ -20,51 +22,57 @@ import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
 
 import static java.lang.Thread.sleep;
 
 @ApplicationScoped
 public class JobProcessor {
+    private final ReactiveRedisDataSource reactiveRedisDataSource;
 
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(JobProcessor.class);
-    private final ReactivePubSubCommands<SimulationResult> publisher;
-    private ReactiveKeyCommands<String> keyCommands;
-
-    private final Logger logger;
+    Logger logger;
 
     @ConfigProperty(name = "animo.config.file.path")
     String configFilePath;
 
-    public JobProcessor(Logger logger, ReactiveRedisDataSource ds) {
+    public JobProcessor(Logger logger, ReactiveRedisDataSource reactiveRedisDataSource) {
         this.logger = logger;
-        this.publisher = ds.pubsub(SimulationResult.class);
+        this.reactiveRedisDataSource = reactiveRedisDataSource;
     }
 
     @ConsumeEvent("job-request")
     Uni<Void> consumeJob(SimulationJob item) {
         if (item != null) {
-            logger.infof("Simulator %s is going to simulate", item);
-            try {
-                return Uni.createFrom().item(() -> {
-                            try {
-                                SimulationResult simulationResult = simulate(item);
-                                return publisher.publish("job-results", simulationResult);
-                            } catch (AnimoException | JSONException | IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        })
-                        .replaceWithVoid();
-            } catch (Exception e) {
-                logger.errorf("Simulator %s failed to simulate %s", item, e);
-            }
+            return Uni.createFrom().item(() -> simulate(item))
+                    .runSubscriptionOn(Infrastructure.getDefaultWorkerPool())
+                    .chain(result -> reactiveRedisDataSource.stream(SimulationResult.class)
+                            .xadd("results", Map.of("data", result)))
+                    // 3. Handle errors within the pipeline
+                    .onFailure().invoke(e -> logger.errorf("Simulator failed for %s: %s", item, e.getMessage()))
+                    .replaceWithVoid();
         }
         return Uni.createFrom().voidItem();
     }
 
-    public SimulationResult simulate(SimulationJob request) throws AnimoException, JSONException, IOException {
+    public SimulationResult simulate(SimulationJob request) {
+        logger.infof("Simulator %s is going to simulate", request);
+        Instant start = Instant.now();
         JSONObject jsonModel = new JSONObject(request.getModel());
-        Model model = ModelAnalyzer.getModelFromJson(jsonModel, request.getMinutesToSimulate());
-        JSONObject result = HeadlessMain.executeFromRequest(new ModelAnalyzer(configFilePath), new JSONObject(request), model);
+        Model model = null;
+        JSONObject result;
+        try {
+            model = ModelAnalyzer.getModelFromJson(jsonModel, request.getMinutesToSimulate());
+            result = HeadlessMain.executeFromRequest(new ModelAnalyzer(configFilePath), new JSONObject(request), model);
+        } catch (JSONException | AnimoException | IOException e) {
+            throw new RuntimeException(e);
+        }
+        Instant end = Instant.now();
+        logger.infof("Simulation took %s", Duration.between(start, end));
+
         return new SimulationResult(request.getId(), result.toString(), request.getClientId());
     }
 }

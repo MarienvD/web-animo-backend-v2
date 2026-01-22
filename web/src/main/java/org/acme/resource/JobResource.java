@@ -21,7 +21,8 @@ public class JobResource {
     public Response submit(@HeaderParam("clientId") String clientId, @HeaderParam("token") String token, SimulationJob job) {
         job.setClientId(clientId);
         job.setToken(token);
-        return jobManager.submitJob(job);
+        jobManager.submitJob(job);
+        return Response.ok().build();
     }
 
     @GET
