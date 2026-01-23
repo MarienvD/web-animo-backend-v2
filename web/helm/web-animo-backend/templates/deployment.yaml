@@ -16,7 +16,7 @@ spec:
         - env:
             - name: animo.config.file.path
               value: /etc/animo/ANIMO_configuration.xml
-          image: docker.io/marien99/webanimo-backend:1.0.1
+          image: "docker.io/marien99/webanimo-backend:{{ .Chart.AppVersion }}"
           name: quarkus
           ports:
             - containerPort: 8080
