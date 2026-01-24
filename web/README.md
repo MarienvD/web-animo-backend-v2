@@ -72,15 +72,11 @@ use a multi?? with an manageded executor service that runs the job and sends upd
 
 ```shell
   mvn package
-  docker image build --build-arg KEY=c59c14ac-2d66-4da6-82c8-13b419016c1e --tag webanimo-uppaal-5.1.0 -f src/main/docker/Dockerfile.jvm .                                
-  docker tag webanimo-uppaal-5.1.0 harbor.utsp.utwente.nl/library/webanimo-uppaal-5.1.0:latest
-  docker image pull redis
-  docker tag redis harbor.utsp.utwente.nl/library/redis-webanimo-custom:latest
-  docker compose up -d
+  docker image build --build-arg KEY=c59c14ac-2d66-4da6-82c8-13b419016c1e --tag docker.io/marien99/webanimo-backend:1.0.20 -f src/main/docker/Dockerfile.jvm .                                
   
 #  push to docker
   docker tag webanimo-uppaal-5.1.0 marien99/webanimo-backend:latest
-  docker push marien99/webanimo-backend:latest
+  docker push marien99/webanimo-backend:1.0.2
   
   # deploy on k8s
    kubectl create deployment web-animo-v2 --image=marien99/webanimo-backend:latest
