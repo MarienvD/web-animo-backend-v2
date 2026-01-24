@@ -2,6 +2,7 @@ package org.acme.processors;
 
 import animo.core.model.Model;
 import animo.exceptions.AnimoException;
+import io.micrometer.core.annotation.Timed;
 import io.quarkus.redis.datasource.ReactiveRedisDataSource;
 import io.quarkus.redis.datasource.keys.ReactiveKeyCommands;
 import io.quarkus.redis.datasource.pubsub.ReactivePubSubCommands;
@@ -60,6 +61,7 @@ public class JobProcessor {
         return Uni.createFrom().voidItem();
     }
 
+    @Timed(value = "simulation")
     public SimulationResult simulate(SimulationJob request) {
         logger.infof("Simulator %s is going to simulate", request);
         Instant start = Instant.now();
