@@ -7,6 +7,8 @@ public class SimulationResult {
     private String result;
     private String clientId;
 
+    public SimulationResult() {}
+
     public SimulationResult(String jobId, String result, String clientId) {
         this.clientId = clientId;
         this.jobId = jobId;

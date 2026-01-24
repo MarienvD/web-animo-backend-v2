@@ -47,11 +47,13 @@ public class JobProcessor {
     @ConsumeEvent("job-request")
     Uni<Void> consumeJob(SimulationJob item) {
         if (item != null) {
+            logger.infof("simulate!");
             return Uni.createFrom().item(() -> simulate(item))
                     .runSubscriptionOn(Infrastructure.getDefaultWorkerPool())
                     .chain(result -> reactiveRedisDataSource.stream(SimulationResult.class)
                             .xadd("results", Map.of("data", result)))
                     // 3. Handle errors within the pipeline
+                    .ifNoItem().after(Duration.ofMillis(10000)).fail()
                     .onFailure().invoke(e -> logger.errorf("Simulator failed for %s: %s", item, e.getMessage()))
                     .replaceWithVoid();
         }
