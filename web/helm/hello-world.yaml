@@ -1,0 +1,51 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"cert-manager.io/cluster-issuer":"letsencrypt-prod","kubernetes.io/ingress.class":"nginx","kubernetes.io/tls-acme":"true"},"name":"hello-world","namespace":"default"},"spec":{"ingressClassName":"nginx","rules":[{"host":"apps.draanenv.nl","http":{"paths":[{"backend":{"service":{"name":"hello-world","port":{"number":80}}},"path":"/","pathType":"Prefix"},{"backend":{"service":{"name":"web-animo-frontend","port":{"number":8081}}},"path":"/animo","pathType":"Prefix"}]}}],"tls":[{"hosts":["apps.draanenv.nl"],"secretName":"apps.draanenv.nl-tls"}]}}
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+  creationTimestamp: "2025-12-27T14:00:12Z"
+  generation: 5
+  name: hello-world
+  namespace: default
+  resourceVersion: "16439"
+  uid: 57a001ae-47af-40f8-9bff-0d8548da336d
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: apps.draanenv.nl
+    http:
+      paths:
+      - backend:
+          service:
+            name: hello-world
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+      - backend:
+          service:
+            name: web-animo-frontend
+            port:
+              number: 8081
+        path: /animo
+        pathType: Prefix
+      - backend:
+          service:
+            name: kube-prometheus-stack-1769252590-grafana
+            port:
+              number: 3000
+        path: /grafana
+        pathType: Prefix
+  tls:
+  - hosts:
+    - apps.draanenv.nl
+    secretName: apps.draanenv.nl-tls
+status:
+  loadBalancer:
+    ingress:
+    - hostname: apps.draanenv.nl
+
