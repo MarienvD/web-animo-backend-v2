@@ -104,5 +104,7 @@ use a multi?? with an manageded executor service that runs the job and sends upd
    
     kubectl logs deployment/quarkus --all-pods=true
     kubectl get pods -n default -l app=quarkus -o wide
+    
+    helm install prometheus-community/kube-prometheus-stack
 ```
 
