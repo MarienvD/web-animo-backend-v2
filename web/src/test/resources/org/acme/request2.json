@@ -1,0 +1,356 @@
+{
+  "elements": {
+    "nodes": [
+      {
+        "data": {
+          "activityRatio": 0,
+          "plotted": true,
+          "NODE_TYPE": "DefaultNode",
+          "description": "",
+          "enabled": true,
+          "moleculeType": "Cytokine",
+          "randomInitialConcentration": false,
+          "initialConcentration": 0,
+          "selected": false,
+          "name": "",
+          "levels": 100,
+          "canonicalName": "1",
+          "id": "1",
+          "Position_X": -400.66541722704744,
+          "Position_Y": 17.67539614602748
+        },
+        "position": {
+          "x": -400.66541722704744,
+          "y": 17.67539614602748
+        },
+        "group": "nodes",
+        "removed": false,
+        "selected": false,
+        "selectable": false,
+        "locked": false,
+        "grabbable": true,
+        "pannable": false,
+        "classes": ""
+      },
+      {
+        "data": {
+          "activityRatio": 0.95,
+          "plotted": true,
+          "NODE_TYPE": "DefaultNode",
+          "description": "",
+          "enabled": true,
+          "moleculeType": "Cytokine",
+          "randomInitialConcentration": false,
+          "initialConcentration": 95,
+          "selected": false,
+          "name": "",
+          "levels": 100,
+          "canonicalName": "2",
+          "id": "2",
+          "Position_X": -228.57439153534338,
+          "Position_Y": 15.960646839945314
+        },
+        "position": {
+          "x": -228.57439153534338,
+          "y": 15.960646839945314
+        },
+        "group": "nodes",
+        "removed": false,
+        "selected": false,
+        "selectable": false,
+        "locked": false,
+        "grabbable": true,
+        "pannable": false,
+        "classes": ""
+      },
+      {
+        "data": {
+          "activityRatio": 0.28,
+          "plotted": true,
+          "NODE_TYPE": "DefaultNode",
+          "description": "",
+          "enabled": true,
+          "moleculeType": "Cytokine",
+          "randomInitialConcentration": false,
+          "initialConcentration": 28,
+          "selected": false,
+          "name": "",
+          "levels": 100,
+          "canonicalName": "3",
+          "id": "4",
+          "Position_X": -233.94235765501702,
+          "Position_Y": -81.59757021821643
+        },
+        "position": {
+          "x": -233.94235765501702,
+          "y": -81.59757021821643
+        },
+        "group": "nodes",
+        "removed": false,
+        "selected": false,
+        "selectable": false,
+        "locked": false,
+        "grabbable": true,
+        "pannable": false,
+        "classes": ""
+      }
+    ],
+    "edges": [
+      {
+        "data": {
+          "source": "2",
+          "target": "1",
+          "shared_interaction": "DefaultEdge",
+          "description": "",
+          "increment": 1,
+          "k": 0.008,
+          "enabled": true,
+          "scenario": "0",
+          "interaction": "DefaultEdge",
+          "selected": false,
+          "_REACTANT_ACT_E2": "true",
+          "_REACTANT_ACT_E1": "true",
+          "_REACTANT_E2": "4",
+          "_REACTANT_E1": "1",
+          "newEdgeID": "3",
+          "id": "3"
+        },
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "group": "edges",
+        "removed": false,
+        "selected": true,
+        "selectable": false,
+        "locked": false,
+        "grabbable": true,
+        "pannable": true,
+        "classes": ""
+      },
+      {
+        "data": {
+          "source": "4",
+          "target": "1",
+          "shared_interaction": "DefaultEdge",
+          "description": "",
+          "increment": 1,
+          "k": 0.008,
+          "enabled": true,
+          "scenario": "0",
+          "interaction": "DefaultEdge",
+          "selected": false,
+          "_REACTANT_ACT_E2": false,
+          "_REACTANT_ACT_E1": false,
+          "_REACTANT_E2": "2",
+          "_REACTANT_E1": "1",
+          "newEdgeID": "5",
+          "id": "5"
+        },
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "group": "edges",
+        "removed": false,
+        "selected": false,
+        "selectable": false,
+        "locked": false,
+        "grabbable": true,
+        "pannable": true,
+        "classes": ""
+      }
+    ]
+  },
+  "style": [
+    {
+      "selector": "node",
+      "style": {
+        "label": "data(canonicalName)",
+        "text-valign": "center",
+        "text-halign": "center",
+        "font-family": "Montserrat",
+        "color": "rgb(0,0,0)",
+        "width": "50px",
+        "height": "50px",
+        "background-color": "rgb(128,128,128)",
+        "border-width": "4px",
+        "border-color": "rgb(62,62,62)",
+        "text-outline-width": "2px",
+        "text-outline-color": "rgb(255,255,255)"
+      }
+    },
+    {
+      "selector": "node[moleculeType = \"Cytokine\"]",
+      "style": {
+        "label": "data(canonicalName)",
+        "shape": "rectangle"
+      }
+    },
+    {
+      "selector": "node[moleculeType = \"Receptor\"]",
+      "style": {
+        "label": "data(canonicalName)",
+        "height": "75px"
+      }
+    },
+    {
+      "selector": "node[moleculeType = \"Kinase\"]",
+      "style": {
+        "label": "data(canonicalName)"
+      }
+    },
+    {
+      "selector": "node[moleculeType = \"Phosphatase\"]",
+      "style": {
+        "label": "data(canonicalName)",
+        "shape": "diamond"
+      }
+    },
+    {
+      "selector": "node[moleculeType = \"Transcription factor\"]",
+      "style": {
+        "label": "data(canonicalName)",
+        "width": "75px"
+      }
+    },
+    {
+      "selector": "node[moleculeType = \"Gene\"]",
+      "style": {
+        "label": "data(canonicalName)",
+        "shape": "triangle"
+      }
+    },
+    {
+      "selector": "node[moleculeType = \"mRNA\"]",
+      "style": {
+        "label": "data(canonicalName)",
+        "shape": "rhomboid"
+      }
+    },
+    {
+      "selector": "node[moleculeType = \"Other\"]",
+      "style": {
+        "label": "data(canonicalName)",
+        "shape": "rectangle",
+        "width": "75px"
+      }
+    },
+    {
+      "selector": "node[!enabled]",
+      "style": {
+        "background-opacity": "0.23529411764705882"
+      }
+    },
+    {
+      "selector": "node[activityRatio > 1]",
+      "style": {
+        "background-color": "rgb(62,213,37)"
+      }
+    },
+    {
+      "selector": "node[activityRatio = 1]",
+      "style": {
+        "background-color": "rgb(62,213,37)"
+      }
+    },
+    {
+      "selector": "node[activityRatio = 0]",
+      "style": {
+        "background-color": "rgb(236,59,59)"
+      }
+    },
+    {
+      "selector": "node[activityRatio < 0]",
+      "style": {
+        "background-color": "rgb(236,59,59)"
+      }
+    },
+    {
+      "selector": "node[activityRatio > 0.5][activityRatio < 1]",
+      "style": {
+        "background-color": "mapData(activityRatio,0.5,1,rgb(255,204,0),rgb(62,213,37))"
+      }
+    },
+    {
+      "selector": "node[activityRatio > 0][activityRatio <= 0.5]",
+      "style": {
+        "background-color": "mapData(activityRatio,0,0.5,rgb(236,59,59),rgb(255,204,0))"
+      }
+    },
+    {
+      "selector": "edge",
+      "style": {
+        "font-size": "10px",
+        "source-arrow-color": "rgb(62,62,62)",
+        "line-color": "rgb(62,62,62)",
+        "label": "",
+        "target-arrow-color": "rgb(62,62,62)",
+        "source-arrow-shape": "none",
+        "text-opacity": "1",
+        "target-arrow-shape": "none",
+        "line-style": "solid",
+        "curve-style": "bezier"
+      }
+    },
+    {
+      "selector": "edge[sourceActivityRatio]",
+      "style": {
+        "width": "mapData(sourceActivityRatio,0.0,1.0, 3, 8)"
+      }
+    },
+    {
+      "selector": "edge[increment = 1]",
+      "style": {
+        "target-arrow-shape": "triangle"
+      }
+    },
+    {
+      "selector": "edge[increment = -1]",
+      "style": {
+        "target-arrow-shape": "tee"
+      }
+    },
+    {
+      "selector": "edge[!enabled]",
+      "style": {
+        "opacity": "0.23529411764705882"
+      }
+    },
+    {
+      "selector": ".currentActive",
+      "style": {
+        "border-color": "rgb(53,38,255)",
+        "line-color": "rgb(53,38,255)",
+        "target-arrow-color": "rgb(53,38,255)"
+      }
+    }
+  ],
+  "data": {
+    "shared_name": "Network 0",
+    "__Annotations": [
+      ""
+    ],
+    "networkMetadata": "",
+    "name": "Network 0",
+    "SUID": 52,
+    "seconds_per_point": 1,
+    "selected": true,
+    "levels": 100
+  },
+  "zoomingEnabled": true,
+  "userZoomingEnabled": true,
+  "zoom": 2.956909261522641,
+  "minZoom": 1e-50,
+  "maxZoom": 1e+50,
+  "panningEnabled": true,
+  "userPanningEnabled": true,
+  "pan": {
+    "x": 1372.526410874833,
+    "y": 236.76780572141837
+  },
+  "boxSelectionEnabled": true,
+  "renderer": {
+    "name": "canvas"
+  }
+}

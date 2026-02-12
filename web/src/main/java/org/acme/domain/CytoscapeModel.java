@@ -1,7 +1,9 @@
 package org.acme.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CytoscapeModel extends GraphModel {
     @JsonProperty("format_version")
     private String formatVersion;

@@ -1,6 +1,8 @@
 package org.acme.domain;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class GraphModel {
@@ -405,6 +407,7 @@ public class GraphModel {
         }
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class EdgeData {
         private String id;
         private String source;
@@ -437,6 +440,18 @@ public class GraphModel {
 
         private boolean selected;
         private String canonicalName;
+
+        @JsonProperty("_REACTANT_E2")
+        private String reactantE2;
+
+        @JsonProperty("_REACTANT_E1")
+        private String reactantE1;
+
+        @JsonProperty("_REACTANT_ACT_E1")
+        private boolean reactantE1Active;
+
+        @JsonProperty("_REACTANT_ACT_E2")
+        private boolean reactantE2Active;
 
         public String getId() {
             return id;
@@ -580,6 +595,38 @@ public class GraphModel {
 
         public void setCanonicalName(String canonicalName) {
             this.canonicalName = canonicalName;
+        }
+
+        public boolean isReactantE2Active() {
+            return reactantE2Active;
+        }
+
+        public void setReactantE2Active(boolean reactantE2Active) {
+            this.reactantE2Active = reactantE2Active;
+        }
+
+        public boolean isReactantE1Active() {
+            return reactantE1Active;
+        }
+
+        public void setReactantE1Active(boolean reactantE1Active) {
+            this.reactantE1Active = reactantE1Active;
+        }
+
+        public String getReactantE1() {
+            return reactantE1;
+        }
+
+        public void setReactantE1(String reactantE1) {
+            this.reactantE1 = reactantE1;
+        }
+
+        public String getReactantE2() {
+            return reactantE2;
+        }
+
+        public void setReactantE2(String reactantE2) {
+            this.reactantE2 = reactantE2;
         }
     }
 
