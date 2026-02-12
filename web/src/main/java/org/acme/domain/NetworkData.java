@@ -1,9 +1,11 @@
 package org.acme.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Arrays;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class NetworkData {
     @JsonProperty("shared_name")
     public String sharedName;
@@ -19,6 +21,12 @@ public class NetworkData {
 
     @JsonProperty("seconds_per_point")
     public double secondsPerPoint;
+
+    @JsonProperty("seconds per point")
+    public double secondsPerPointAlt;
+
+    @JsonProperty("time scale factor")
+    private double timeScaleFactor;
 
     public boolean selected;
     public int levels;
@@ -99,5 +107,21 @@ public class NetworkData {
 
     public void setLevels(int levels) {
         this.levels = levels;
+    }
+
+    public double getSecondsPerPointAlt() {
+        return secondsPerPointAlt;
+    }
+
+    public void setSecondsPerPointAlt(double secondsPerPointAlt) {
+        this.secondsPerPointAlt = secondsPerPointAlt;
+    }
+
+    public double getTimeScaleFactor() {
+        return timeScaleFactor;
+    }
+
+    public void setTimeScaleFactor(double timeScaleFactor) {
+        this.timeScaleFactor = timeScaleFactor;
     }
 }
