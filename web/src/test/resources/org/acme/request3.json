@@ -1,0 +1,209 @@
+{
+  "elements": {
+    "nodes": [
+      {
+        "data": {
+          "id": "1",
+          "activityRatio": 0.0,
+          "plotted": true,
+          "description": "",
+          "enabled": true,
+          "moleculeType": "Cytokine",
+          "name": "",
+          "randomInitialConcentration": false,
+          "randomInitialConcentrationMinimum": null,
+          "randomInitialConcentrationMaximum": null,
+          "randomInitialConcentrationStep": null,
+          "initialConcentration": 0,
+          "selected": false,
+          "levels": 100,
+          "canonicalName": "1",
+          "NODE_TYPE": "DefaultNode",
+          "shared_name": null,
+          "Position_X": -400.66541722704744,
+          "Position_Y": 17.67539614602748,
+          "SUID": 0
+        },
+        "position": {
+          "x": -400.66541722704744,
+          "y": 17.67539614602748
+        },
+        "group": "nodes",
+        "removed": false,
+        "selected": false,
+        "selectable": false,
+        "locked": false,
+        "grabbable": true,
+        "pannable": false,
+        "classes": ""
+      },
+      {
+        "data": {
+          "id": "2",
+          "activityRatio": 0.95,
+          "plotted": true,
+          "description": "",
+          "enabled": true,
+          "moleculeType": "Cytokine",
+          "name": "",
+          "randomInitialConcentration": false,
+          "randomInitialConcentrationMinimum": null,
+          "randomInitialConcentrationMaximum": null,
+          "randomInitialConcentrationStep": null,
+          "initialConcentration": 95,
+          "selected": false,
+          "levels": 100,
+          "canonicalName": "2",
+          "NODE_TYPE": "DefaultNode",
+          "shared_name": null,
+          "Position_X": -228.57439153534338,
+          "Position_Y": 15.960646839945314,
+          "SUID": 0
+        },
+        "position": {
+          "x": -228.57439153534338,
+          "y": 15.960646839945314
+        },
+        "group": "nodes",
+        "removed": false,
+        "selected": false,
+        "selectable": false,
+        "locked": false,
+        "grabbable": true,
+        "pannable": false,
+        "classes": ""
+      },
+      {
+        "data": {
+          "id": "4",
+          "activityRatio": 0.28,
+          "plotted": true,
+          "description": "",
+          "enabled": true,
+          "moleculeType": "Cytokine",
+          "name": "",
+          "randomInitialConcentration": false,
+          "randomInitialConcentrationMinimum": null,
+          "randomInitialConcentrationMaximum": null,
+          "randomInitialConcentrationStep": null,
+          "initialConcentration": 28,
+          "selected": false,
+          "levels": 100,
+          "canonicalName": "3",
+          "NODE_TYPE": "DefaultNode",
+          "shared_name": null,
+          "Position_X": -233.94235765501702,
+          "Position_Y": -81.59757021821643,
+          "SUID": 0
+        },
+        "position": {
+          "x": -233.94235765501702,
+          "y": -81.59757021821643
+        },
+        "group": "nodes",
+        "removed": false,
+        "selected": false,
+        "selectable": false,
+        "locked": false,
+        "grabbable": true,
+        "pannable": false,
+        "classes": ""
+      }
+    ],
+    "edges": [
+      {
+        "data": {
+          "id": "3",
+          "source": "2",
+          "target": "1",
+          "activityRatio": 0.0,
+          "description": "",
+          "increment": 1,
+          "k": 0.008,
+          "enabled": true,
+          "scenario": 0,
+          "name": null,
+          "interaction": "DefaultEdge",
+          "selected": false,
+          "canonicalName": null,
+          "shared_interaction": "DefaultEdge",
+          "Bend_handles": null,
+          "shared_name": null,
+          "SUID": 0,
+          "output_reactant": null,
+          "_REACTANT_E2": "4",
+          "_REACTANT_E1": "1",
+          "_REACTANT_ACT_E1": true,
+          "_REACTANT_ACT_E2": true
+        },
+        "position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "group": "edges",
+        "removed": false,
+        "selected": true,
+        "selectable": false,
+        "locked": false,
+        "grabbable": true,
+        "pannable": true,
+        "classes": ""
+      },
+      {
+        "data": {
+          "id": "5",
+          "source": "4",
+          "target": "1",
+          "activityRatio": 0.0,
+          "description": "",
+          "increment": 1,
+          "k": 0.008,
+          "enabled": true,
+          "scenario": 0,
+          "name": null,
+          "interaction": "DefaultEdge",
+          "selected": false,
+          "canonicalName": null,
+          "shared_interaction": "DefaultEdge",
+          "Bend_handles": null,
+          "shared_name": null,
+          "SUID": 0,
+          "output_reactant": null,
+          "_REACTANT_E2": "2",
+          "_REACTANT_E1": "1",
+          "_REACTANT_ACT_E1": false,
+          "_REACTANT_ACT_E2": false
+        },
+        "position": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "group": "edges",
+        "removed": false,
+        "selected": false,
+        "selectable": false,
+        "locked": false,
+        "grabbable": true,
+        "pannable": true,
+        "classes": ""
+      }
+    ]
+  },
+  "data": {
+    "networkMetadata": "",
+    "name": "Network 0",
+    "selected": true,
+    "levels": 100,
+    "shared_name": "Network 0",
+    "__Annotations": [
+      ""
+    ],
+    "SUID": 52,
+    "seconds_per_point": 1.0,
+    "seconds per point": null,
+    "time scale factor": null
+  },
+  "format_version": null,
+  "generated_by": null,
+  "target_cytoscapejs_version": null
+}
