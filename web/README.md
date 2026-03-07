@@ -63,7 +63,7 @@ Easily start your REST Web Services
 
 ```shell
   mvn package
-  docker image build --build-arg KEY=c59c14ac-2d66-4da6-82c8-13b419016c1e --tag docker.io/marien99/webanimo-backend:1.0.26 -f src/main/docker/Dockerfile.jvm .                                
+  docker image build --build-arg KEY=b4e9c55b-46e6-4122-90ca-3a6274e6b9a1 --tag docker.io/marien99/webanimo-backend:1.0.22 -f src/main/docker/Dockerfile.jvm .                                
   
 #  push to docker
   docker tag webanimo-uppaal-5.1.0 marien99/webanimo-backend:latest
