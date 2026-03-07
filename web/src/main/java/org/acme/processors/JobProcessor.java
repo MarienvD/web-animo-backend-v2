@@ -65,13 +65,12 @@ public class JobProcessor {
     public SimulationResult simulate(SimulationJob request) {
         logger.infof("Simulator %s is going to simulate", request);
         Instant start = Instant.now();
-        JSONObject jsonModel = new JSONObject(request.getModel());
         Model model = null;
         JSONObject result;
         try {
-            model = ModelAnalyzer.getModelFromJson(jsonModel, request.getMinutesToSimulate());
+            model = ModelAnalyzer.getModelFromJson(request.getModel(), request.getMinutesToSimulate());
             result = HeadlessMain.executeFromRequest(new ModelAnalyzer(configFilePath), new JSONObject(request), model);
-        } catch (JSONException | AnimoException | IOException e) {
+        } catch (JSONException | AnimoException | IOException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
         Instant end = Instant.now();

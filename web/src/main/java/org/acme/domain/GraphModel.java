@@ -261,13 +261,16 @@ public class GraphModel {
         private String moleculeType;
         private String name;
         private boolean randomInitialConcentration;
+        private Integer randomInitialConcentrationMinimum;
+        private Integer randomInitialConcentrationMaximum;
+        private Integer randomInitialConcentrationStep;
 
         @JsonProperty("SUID")
         private long suid;
 
-        private double initialConcentration;
+        private Integer initialConcentration;
         private boolean selected;
-        private int levels;
+        private Integer levels;
         private String canonicalName;
 
         public String getId() {
@@ -374,11 +377,11 @@ public class GraphModel {
             this.suid = suid;
         }
 
-        public double getInitialConcentration() {
+        public Integer getInitialConcentration() {
             return initialConcentration;
         }
 
-        public void setInitialConcentration(double initialConcentration) {
+        public void setInitialConcentration(Integer initialConcentration) {
             this.initialConcentration = initialConcentration;
         }
 
@@ -390,11 +393,11 @@ public class GraphModel {
             this.selected = selected;
         }
 
-        public int getLevels() {
+        public Integer getLevels() {
             return levels;
         }
 
-        public void setLevels(int levels) {
+        public void setLevels(Integer levels) {
             this.levels = levels;
         }
 
@@ -404,6 +407,30 @@ public class GraphModel {
 
         public void setCanonicalName(String canonicalName) {
             this.canonicalName = canonicalName;
+        }
+
+        public Integer getRandomInitialConcentrationMaximum() {
+            return randomInitialConcentrationMaximum;
+        }
+
+        public void setRandomInitialConcentrationMaximum(Integer randomInitialConcentrationMaximum) {
+            this.randomInitialConcentrationMaximum = randomInitialConcentrationMaximum;
+        }
+
+        public Integer getRandomInitialConcentrationMinimum() {
+            return randomInitialConcentrationMinimum;
+        }
+
+        public void setRandomInitialConcentrationMinimum(Integer randomInitialConcentrationMinimum) {
+            this.randomInitialConcentrationMinimum = randomInitialConcentrationMinimum;
+        }
+
+        public Integer getRandomInitialConcentrationStep() {
+            return randomInitialConcentrationStep;
+        }
+
+        public void setRandomInitialConcentrationStep(Integer randomInitialConcentrationStep) {
+            this.randomInitialConcentrationStep = randomInitialConcentrationStep;
         }
     }
 
@@ -421,14 +448,14 @@ public class GraphModel {
         private List<Double> bendHandles;
 
         private String description;
-        private int increment;
+        private Integer increment;
         private double k;
         private boolean enabled;
 
         @JsonProperty("shared_name")
         private String sharedName;
 
-        private int scenario;
+        private Integer scenario;
         private String name;
         private String interaction;
 
@@ -509,11 +536,11 @@ public class GraphModel {
             this.description = description;
         }
 
-        public int getIncrement() {
+        public Integer getIncrement() {
             return increment;
         }
 
-        public void setIncrement(int increment) {
+        public void setIncrement(Integer increment) {
             this.increment = increment;
         }
 
@@ -541,11 +568,11 @@ public class GraphModel {
             this.sharedName = sharedName;
         }
 
-        public int getScenario() {
+        public Integer getScenario() {
             return scenario;
         }
 
-        public void setScenario(int scenario) {
+        public void setScenario(Integer scenario) {
             this.scenario = scenario;
         }
 

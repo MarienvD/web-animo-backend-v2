@@ -8,28 +8,28 @@ import java.util.Arrays;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class NetworkData {
     @JsonProperty("shared_name")
-    public String sharedName;
+    private String sharedName;
 
     @JsonProperty("__Annotations")
-    public String[] annotations;
+    private String[] annotations;
 
-    public String networkMetadata;
-    public String name;
+    private String networkMetadata;
+    private String name;
 
     @JsonProperty("SUID")
-    public long suid;
+    private long suid;
 
     @JsonProperty("seconds_per_point")
-    public double secondsPerPoint;
+    private Double secondsPerPoint;
 
     @JsonProperty("seconds per point")
-    public double secondsPerPointAlt;
+    private Double secondsPerPointAlt;
 
     @JsonProperty("time scale factor")
-    private double timeScaleFactor;
+    private Double timeScaleFactor;
 
-    public boolean selected;
-    public int levels;
+    private boolean selected;
+    private int levels;
 
     @Override
     public String toString() {
@@ -85,11 +85,11 @@ public class NetworkData {
         this.suid = suid;
     }
 
-    public double getSecondsPerPoint() {
+    public Double getSecondsPerPoint() {
         return secondsPerPoint;
     }
 
-    public void setSecondsPerPoint(double secondsPerPoint) {
+    public void setSecondsPerPoint(Double secondsPerPoint) {
         this.secondsPerPoint = secondsPerPoint;
     }
 
@@ -109,19 +109,19 @@ public class NetworkData {
         this.levels = levels;
     }
 
-    public double getSecondsPerPointAlt() {
+    public Double getSecondsPerPointAlt() {
         return secondsPerPointAlt;
     }
 
-    public void setSecondsPerPointAlt(double secondsPerPointAlt) {
+    public void setSecondsPerPointAlt(Double secondsPerPointAlt) {
         this.secondsPerPointAlt = secondsPerPointAlt;
     }
 
-    public double getTimeScaleFactor() {
+    public Double getTimeScaleFactor() {
         return timeScaleFactor;
     }
 
-    public void setTimeScaleFactor(double timeScaleFactor) {
+    public void setTimeScaleFactor(Double timeScaleFactor) {
         this.timeScaleFactor = timeScaleFactor;
     }
 }

@@ -18,11 +18,42 @@ import static org.junit.jupiter.api.Assertions.*;
 class ModelAnalyzerTest {
 
     @Test
-    void getModelFromJson() throws JSONException, AnimoException, IOException {
+    void getModelFromJson() throws JSONException, AnimoException, IOException, IllegalAccessException {
         InputStream is = ModelAnalyzerTest.class.getResourceAsStream("request2.json");
         CytoscapeModel job = new ObjectMapper().readValue(is, CytoscapeModel.class);
         JSONObject modelJson = new JSONObject(job);
-        Model modelFromJson = ModelAnalyzer.getModelFromJson(modelJson, 1);
-        assertNotNull(modelFromJson);
+        Model modelFromJson = ModelMapper.getModelFromJson(modelJson, 1);
+        Model modelFromJson2 = ModelMapper.getModelFromJson(job, 1);
+//        assertEquals(modelFromJson2.getProperties(), modelFromJson.getProperties());
+
+        assertEquals(modelFromJson2.getProperties().get("maxTime").as(Integer.class),
+                modelFromJson.getProperties().get("maxTime").as(Integer.class));
+
+        assertEquals(modelFromJson2.getProperties().get("minTime").as(Integer.class),
+                modelFromJson.getProperties().get("minTime").as(Integer.class));
+
+        assertEquals(modelFromJson2.getProperties().get("time scale factor").as(Double.class),
+                modelFromJson.getProperties().get("time scale factor").as(Double.class));
+
+        assertEquals(modelFromJson2.getProperties().get("seconds per point").as(Double.class),
+                modelFromJson.getProperties().get("seconds per point").as(Double.class));
+
+        assertEquals(modelFromJson2.getProperties().get("levels").as(Integer.class),
+                modelFromJson.getProperties().get("levels").as(Integer.class));
+
+        assertEquals(modelFromJson2.getProperties().get("sharedName").as(String.class),
+                modelFromJson.getProperties().get("sharedName").as(String.class));
+
+        assertEquals(modelFromJson2.getProperties().get("networkMetadata").as(String.class),
+                modelFromJson.getProperties().get("networkMetadata").as(String.class));
+
+        assertEquals(modelFromJson2.getProperties().get("name").as(String.class),
+                modelFromJson.getProperties().get("name").as(String.class));
+
+        assertEquals(modelFromJson2.getProperties().get("suid").as(Integer.class),
+                modelFromJson.getProperties().get("suid").as(Integer.class));
+
+        assertEquals(modelFromJson2.getProperties().get("selected").as(Boolean.class),
+                modelFromJson.getProperties().get("selected").as(Boolean.class));
     }
 }
