@@ -61,22 +61,13 @@ Easily start your REST Web Services
 
 [Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
 
-
-## TODO
-
-- [ ] Think how job updates happen:
-
-use a multi?? with an manageded executor service that runs the job and sends updates to the client via SSE
-
-- [ ] Job updates are sent to the client via SSE
-
 ```shell
   mvn package
-  docker image build --build-arg KEY=c59c14ac-2d66-4da6-82c8-13b419016c1e --tag docker.io/marien99/webanimo-backend:1.0.22 -f src/main/docker/Dockerfile.jvm .                                
+  docker image build --build-arg KEY=c59c14ac-2d66-4da6-82c8-13b419016c1e --tag docker.io/marien99/webanimo-backend:1.0.26 -f src/main/docker/Dockerfile.jvm .                                
   
 #  push to docker
   docker tag webanimo-uppaal-5.1.0 marien99/webanimo-backend:latest
-  docker push marien99/webanimo-backend:1.0.23
+  docker push marien99/webanimo-backend:1.0.26
   
   # deploy on k8s
    kubectl create deployment web-animo-v2 --image=marien99/webanimo-backend:latest

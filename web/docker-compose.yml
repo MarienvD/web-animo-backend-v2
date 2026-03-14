@@ -5,13 +5,13 @@ services:
     ports:
       - '6379'
   quarkus:
-    image: marien99/webanimo-backend
+    image: marien99/webanimo-backend:1.0.27
     ports:
       - '8080:8080'
     environment:
       - animo.config.file.path=/etc/animo/ANIMO_configuration.xml
       - quarkus.log.level=DEBUG
   webanimo-angular:
-    image: marien99/webanimo-v2:latest
+    image: marien99/webanimo-v2:1.0.25
     ports:
       - '8081:8081'
