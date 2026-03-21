@@ -108,10 +108,12 @@ COPY --chown=185 --from=verifyta /home/uppaal/uppaal /opt/uppaal
 RUN ls -al /opt/uppaal
 
 ENV PATH="/opt/uppaal/bin:$PATH"
-ARG KEY=""
 ARG LEASE="1"
 
-RUN verifyta.sh --key ${KEY} --lease ${LEASE}
+RUN mkdir -p /home/default/.config/uppaal && chmod -R 777 /home/default/.config
+RUN --mount=type=secret,id=UPPAAL_KEY,env=UPPAAL_KEY \
+        verifyta.sh --key ${UPPAAL_KEY} --lease ${LEASE}
+
 RUN verifyta.sh --version
 
 # Copy ANIMO config file

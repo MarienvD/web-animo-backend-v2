@@ -62,37 +62,24 @@ Easily start your REST Web Services
 [Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
 
 ```shell
-  mvn package
-  docker image build --build-arg KEY=b4e9c55b-46e6-4122-90ca-3a6274e6b9a1 --tag docker.io/marien99/webanimo-backend:1.0.22 -f src/main/docker/Dockerfile.jvm .                                
-  
-#  push to docker
-  docker tag webanimo-uppaal-5.1.0 marien99/webanimo-backend:latest
-  docker push marien99/webanimo-backend:1.0.26
-  
-  # deploy on k8s
-   kubectl create deployment web-animo-v2 --image=marien99/webanimo-backend:latest
-  kubectl expose deployment quarkus --type=LoadBalancer --port=8080     
-  
-  # replace image
-  kubectl set image deployments/kubernetes-bootcamp kubernetes-bootcamp=docker.io/jocatalin/kubernetes-bootcamp:v2
-
-  kubectl apply -f .\kompose-output\kompose.yml
-  
-  # info
-  kubectl config use-context docker-desktop
-  kubectl config use-context cluster-k81y
-  kubectl logs -f -l app=quarkus --all-containers=true  
-   kubectl logs -f quarkus-6884dd45f4-8r882
-  kubectl cluster-info dump
+    mvn package
+    UPPAAL_KEY=$KEY docker buildx build --secret id=UPPAAL_KEY --tag docker.io/marien99/webanimo-backend:1.0.30 -f src/main/docker/Dockerfile.jvm .  
+    #  push to docker
+    docker push marien99/webanimo-backend:1.0.26
+    
+    # info
+    kubectl config use-context docker-desktop
+    kubectl config use-context cluster-k81y
+    kubectl logs -f -l app=quarkus --all-containers=true  
+    kubectl cluster-info dump
   
   # helm chart
-  helm repo add bitnami https://charts.bitnami.com/bitnami
-  helm install web-animo-frontend --generate-name
+    helm repo add bitnami https://charts.bitnami.com/bitnami
+    helm install web-animo-frontend --generate-name
+    helm install web-animo-backend --generate-name     
   
-  helm install web-animo-backend --generate-name     
-  
-   helm upgrade web-animo-backend-1766478709 web-animo-backend 
-   
+    helm upgrade web-animo-backend-1766478709 web-animo-backend 
+    
     kubectl logs deployment/quarkus --all-pods=true
     kubectl get pods -n default -l app=quarkus -o wide
     
