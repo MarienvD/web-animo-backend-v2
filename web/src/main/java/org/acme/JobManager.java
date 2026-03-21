@@ -36,7 +36,7 @@ public class JobManager {
     void init() {
         logger.info("Init JobManager (blocking XREAD)");
 
-        startXreadLoop("results", "$"); // use "0-0" if you want to read old entries too
+        startXreadLoop("results", "$"); // use "0-0" if we want to read old entries too
     }
 
     private void startXreadLoop(String stream, String startId) {
@@ -104,7 +104,6 @@ public class JobManager {
                     bus.publish("job-result", dataValue);
                 } catch (Exception e) {
                     logger.errorf(e, "Failed to decode SimulationResult from stream entry %s: %s", id, dataValue);
-                    // Decide: skip, or stop. Right now we skip but advance lastSeenId to avoid infinite poison-pill loops.
                 }
 
                 lastSeenId = id;

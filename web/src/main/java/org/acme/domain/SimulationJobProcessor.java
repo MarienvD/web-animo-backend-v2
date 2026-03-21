@@ -21,7 +21,7 @@ import java.time.Instant;
 public class SimulationJobProcessor implements JobProcessor {
     private final static Logger logger = Logger.getLogger(SimulationJobProcessor.class);
     private final SimulationJob params;
-    private String configFilePath;
+    private final String configFilePath;
 
     public SimulationJobProcessor(SimulationJob params, String configFilePath) {
         this.params = params;

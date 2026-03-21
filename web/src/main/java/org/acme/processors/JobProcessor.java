@@ -6,6 +6,7 @@ import io.quarkus.vertx.ConsumeEvent;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import org.acme.JobProcessorBuilder;
 import org.acme.JobResult;
 import org.acme.domain.JobWrapper;
@@ -25,6 +26,8 @@ public class JobProcessor {
 
     @ConfigProperty(name = "animo.config.file.path")
     String configFilePath;
+    @Inject
+    JobProcessorBuilder jobProcessorBuilder;
 
     public JobProcessor(Logger logger, ReactiveRedisDataSource reactiveRedisDataSource) {
         this.logger = logger;
@@ -36,7 +39,7 @@ public class JobProcessor {
         if (item != null) {
             org.acme.domain.JobProcessor builtJobProcessor;
             try {
-                builtJobProcessor = new JobProcessorBuilder().build(item);
+                builtJobProcessor = jobProcessorBuilder.build(item);
             } catch (JsonProcessingException e) {
                 logger.errorf("Could not parse job: %s", item, e);
                 return Uni.createFrom().voidItem();
