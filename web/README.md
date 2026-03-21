@@ -1,88 +1,127 @@
-# web
+# Web Animo Backend
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+The Web Animo Backend is the server-side component of the ANIMO (Analysis of Networks with Interactive Modeling and Observations) web application, developed as part of a master's thesis. It provides RESTful APIs for modeling, simulation, and analysis of biological networks using Quarkus, a supersonic subatomic Java framework.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+## Table of Contents
 
-## Running the application in dev mode
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Running the Application](#running-the-application)
+- [Building and Packaging](#building-and-packaging)
+- [Creating a Native Executable](#creating-a-native-executable)
+- [Docker](#docker)
 
-You can run your application in dev mode that enables live coding using:
+## Prerequisites
 
-```shell script
+Before running this application, ensure you have the following installed:
+
+- **Java 17** or later
+- **Maven 3.9.0** or later
+
+You can verify your installations with:
+
+```bash
+java -version
+mvn -version
+```
+
+## Installation
+
+Navigate to the project directory:
+
+```bash
+cd web-animo-backend-v2/web
+```
+
+Install dependencies:
+
+```bash
+./mvnw clean install
+```
+
+## Running the Application
+
+### Development Mode
+
+To run the application in development mode with live coding:
+
+```bash
 ./mvnw quarkus:dev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+The application will start on `http://localhost:8080`. The Quarkus Dev UI is available at `http://localhost:8080/q/dev/`.
 
-## Packaging and running the application
+### Production Mode
 
-The application can be packaged using:
+Package and run the application:
 
-```shell script
+```bash
+./mvnw package
+java -jar target/quarkus-app/quarkus-run.jar
+```
+
+## Building and Packaging
+
+### Standard JAR
+
+Build a standard JAR:
+
+```bash
 ./mvnw package
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+This creates `target/quarkus-app/quarkus-run.jar` with dependencies in `target/quarkus-app/lib/`.
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+### Uber JAR
 
-If you want to build an _über-jar_, execute the following command:
+Build an uber JAR (self-contained):
 
-```shell script
+```bash
 ./mvnw package -Dquarkus.package.jar.type=uber-jar
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+Run with:
 
-## Creating a native executable
+```bash
+java -jar target/*-runner.jar
+```
 
-You can create a native executable using:
+## Creating a Native Executable
 
-```shell script
+For optimal performance, build a native executable using GraalVM:
+
+```bash
 ./mvnw package -Dnative
 ```
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
+Or, build in a container if GraalVM is not installed:
 
-```shell script
+```bash
 ./mvnw package -Dnative -Dquarkus.native.container-build=true
 ```
 
-You can then execute your native executable with: `./target/web-1.0.0-SNAPSHOT-runner`
+Execute the native binary:
 
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Provided Code
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
-
-```shell
-    mvn package
-    UPPAAL_KEY=$KEY docker buildx build --secret id=UPPAAL_KEY --tag docker.io/marien99/webanimo-backend:1.0.30 -f src/main/docker/Dockerfile.jvm .  
-    #  push to docker
-    docker push marien99/webanimo-backend:1.0.26
-    
-    # info
-    kubectl config use-context docker-desktop
-    kubectl config use-context cluster-k81y
-    kubectl logs -f -l app=quarkus --all-containers=true  
-    kubectl cluster-info dump
-  
-  # helm chart
-    helm repo add bitnami https://charts.bitnami.com/bitnami
-    helm install web-animo-frontend --generate-name
-    helm install web-animo-backend --generate-name     
-  
-    helm upgrade web-animo-backend-1766478709 web-animo-backend 
-    
-    kubectl logs deployment/quarkus --all-pods=true
-    kubectl get pods -n default -l app=quarkus -o wide
-    
-    helm install prometheus-community/kube-prometheus-stack
+```bash
+./target/web-1.0.2-SNAPSHOT-runner
 ```
 
+For more details, see the [Quarkus native executable guide](https://quarkus.io/guides/maven-tooling).
+
+## Docker
+
+To build and run the application using Docker (requires UPPAAL_KEY for UPPAAL integration):
+
+1. Build the Docker image:
+
+```bash
+UPPAAL_KEY=$KEY docker buildx build --secret id=UPPAAL_KEY --tag your-registry/web-animo-backend:latest -f src/main/docker/Dockerfile.jvm .
+```
+
+2. Run the container:
+
+```bash
+docker run -p 8080:8080 your-registry/web-animo-backend:latest
+```
+
+For native builds, use `Dockerfile.native` instead.
