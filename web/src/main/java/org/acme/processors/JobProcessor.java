@@ -24,8 +24,6 @@ public class JobProcessor {
 
     Logger logger;
 
-    @ConfigProperty(name = "animo.config.file.path")
-    String configFilePath;
     @Inject
     JobProcessorBuilder jobProcessorBuilder;
 
@@ -45,7 +43,7 @@ public class JobProcessor {
                 return Uni.createFrom().voidItem();
             }
             logger.infof("simulate!");
-            return Uni.createFrom().item(builtJobProcessor.run())
+            return Uni.createFrom().item(() -> builtJobProcessor.run())
                     .runSubscriptionOn(Infrastructure.getDefaultWorkerPool())
                     .chain(result -> reactiveRedisDataSource.stream(JobResult.class)
                             .xadd("results", Map.of("data", result)))
