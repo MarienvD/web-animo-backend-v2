@@ -2,9 +2,6 @@ package org.acme;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.quarkus.redis.datasource.ReactiveRedisDataSource;
-import io.quarkus.redis.datasource.RedisDataSource;
-import io.quarkus.redis.datasource.list.ListCommands;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
@@ -13,6 +10,8 @@ import io.vertx.mutiny.redis.client.RedisAPI;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.acme.domain.JobType;
+import org.acme.domain.JobWrapper;
 import org.acme.domain.SimulationJob;
 import org.jboss.logging.Logger;
 
@@ -27,7 +26,7 @@ public class JobManager {
     private final RedisAPI redisAPI;
     @Inject
     Logger logger;
-    private Multi<SimulationResult> shared;
+    private Multi<JobResult> shared;
 
     public JobManager(RedisAPI redisAPI) {
         this.redisAPI = redisAPI;
@@ -116,15 +115,22 @@ public class JobManager {
     }
 
 
-    public void submitJob(SimulationJob request) {
-        bus.send("job-request", request);
+    public void submitSimulationJob(SimulationJob request, JobType jobType) {
+        try {
+            JobWrapper jobWrapped = new JobWrapper(new ObjectMapper().writeValueAsString(request), jobType);
+            bus.send("job-request", jobWrapped);
+        } catch (JsonProcessingException e) {
+            logger.error("Could not serialize job", e);
+            throw new RuntimeException(e);
+        }
+
     }
 
-    public Multi<SimulationResult> stream() {
+    public Multi<JobResult> stream() {
         return bus.<String>consumer("job-result")
                 .bodyStream().toMulti().map((r) -> {
                             try {
-                                return new ObjectMapper().readValue(r, SimulationResult.class);
+                                return new ObjectMapper().readValue(r, JobResult.class);
                             } catch (JsonProcessingException e) {
                                 throw new RuntimeException(e);
                             }

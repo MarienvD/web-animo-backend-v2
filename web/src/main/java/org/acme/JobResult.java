@@ -1,18 +1,20 @@
 package org.acme;
 
-import animo.core.analyser.uppaal.SimpleLevelResult;
+import org.acme.domain.JobType;
 
-public class SimulationResult {
+public class JobResult {
     private String jobId;
     private String result;
     private String clientId;
+    private JobType jobType;
 
-    public SimulationResult() {}
+    public JobResult() {}
 
-    public SimulationResult(String jobId, String result, String clientId) {
+    public JobResult(String jobId, String result, String clientId, JobType jobType) {
         this.clientId = clientId;
         this.jobId = jobId;
         this.result = result;
+        this.jobType = jobType;
     }
 
     public String getJobId() {
@@ -36,5 +38,13 @@ public class SimulationResult {
     }
     public void setClientId(String clientId) {
         this.clientId = clientId;
+    }
+
+    public JobType getJobType() {
+        return jobType;
+    }
+
+    public void setJobType(JobType jobType) {
+        this.jobType = jobType;
     }
 }

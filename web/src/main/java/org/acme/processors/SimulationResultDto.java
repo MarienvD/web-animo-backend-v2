@@ -1,14 +1,11 @@
 package org.acme.processors;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.base.MoreObjects;
-import org.acme.domain.GraphModel;
 import org.acme.domain.SimulationJob;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 public class SimulationResultDto {
     @JsonProperty("reactantIds")

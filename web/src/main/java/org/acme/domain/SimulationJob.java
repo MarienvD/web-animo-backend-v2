@@ -1,7 +1,7 @@
 package org.acme.domain;
 
 public class SimulationJob {
-    private final String id;
+    private String id;
     private Integer minutesToSimulate;
     private CytoscapeModel model;
     private String clientId;
@@ -9,7 +9,7 @@ public class SimulationJob {
 
     @Override
     public String toString() {
-        return "SimulationJob{" +
+        return "SimulationJobParams{" +
                 "id='" + id + '\'' +
                 ", minutesToSimulate=" + minutesToSimulate +
                 ", model=" + model +
@@ -18,12 +18,12 @@ public class SimulationJob {
                 '}';
     }
 
-    public SimulationJob(String id) {
-        this.id = id;
-    }
-
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Integer getMinutesToSimulate() {
@@ -58,5 +58,3 @@ public class SimulationJob {
         this.token = token;
     }
 }
-
-
